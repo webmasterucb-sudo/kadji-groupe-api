@@ -33,10 +33,10 @@ export const ArticleSchema = SchemaFactory.createForClass(ArticleActualite);
   
 
 
- 
+   
 @Schema({ timestamps: true }) 
 export class GallerieImage extends Document {
-
+ 
   @Prop({ required: true, maxlength: 1000 })
   imageLink: string;
 

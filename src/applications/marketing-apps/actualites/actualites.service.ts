@@ -35,12 +35,13 @@ export class ArticlesService {
 
 
   async findOne(id: string): Promise<ArticleActualite> {
-    const article = await this.articleModel.findById(id).exec();
+    // const article = await this.articleModel.findById(id).exec();
+    const article = await this.articleModel.findByIdAndUpdate(id, { $inc: { nbrVue: 1 } }, { new: true }).exec();
     if (!article) {
       throw new NotFoundException(`Article avec l'ID ${id} non trouvé`);
     }
     return article;
-  }
+  }  
 
 
   async update(id: string, updateArticleDto: UpdateArticleDto): Promise<ArticleActualite> {
