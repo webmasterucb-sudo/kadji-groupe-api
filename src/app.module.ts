@@ -3,10 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { OffresEmploisModule } from './applications/offres-emplois/offres-emplois.module';
-import { ActualitesModule } from './applications/marketing-apps/actualites/actualites.module';
-import { FormulairesModule } from './applications/marketing-apps/formulaires/formulaires.module';
-import { FinanceAppModule } from './applications/finance-app/finance-app.module';
+// import { OffresEmploisModule } from './applications/offres-emplois/offres-emplois.module';
+// import { ActualitesModule } from './applications/marketing-apps/actualites/actualites.module';
+// import { FormulairesModule } from './applications/marketing-apps/formulaires/formulaires.module';
+// import { FinanceAppModule } from './applications/finance-app/finance-app.module';
+import { MailchimpService } from './shared/mailChimp/mailChimp.service';
+import { CeoCoreModule } from './applications/ceo-office-app/ceo-office-app.module';
 
 @Module({
   imports: [
@@ -22,10 +24,12 @@ import { FinanceAppModule } from './applications/finance-app/finance-app.module'
     }),
 
 
-    OffresEmploisModule,
-    ActualitesModule,
-    FormulairesModule,
-    FinanceAppModule,
+    // OffresEmploisModule,
+    // ActualitesModule,
+    // FormulairesModule,
+    // FinanceAppModule,
+
+    CeoCoreModule,
   ],
   controllers: [AppController],
   providers: [AppService],
