@@ -16,7 +16,7 @@ export class TravelTicket extends Document {
 
   @Prop({ required: true })
   entreprise: string;
- 
+
   @Prop({ required: true })
   departement: string;
 
@@ -26,10 +26,10 @@ export class TravelTicket extends Document {
   @Prop({ required: true })
   motifVoyage: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   devises: string;
 
-  @Prop({ required: true, min: 0 })
+  // @Prop({ required: false, min: 0 })
   prixBilletAvion: number;
 
   @Prop({ required: true })
@@ -38,10 +38,10 @@ export class TravelTicket extends Document {
   @Prop({ required: true })
   projet: string;
 
-  @Prop({ required: true, match: /^[A-Z]{3}$/ })
+  @Prop({ required: false, match: /^[A-Z]{3}$/ })
   provenanceCodeAeroport: string;
 
-  @Prop({ required: true, match: /^[A-Z]{3}$/ })
+  @Prop({ required: false, match: /^[A-Z]{3}$/ })
   destinationCodeAeroport: string;
 
   @Prop({ required: true })
@@ -49,6 +49,24 @@ export class TravelTicket extends Document {
 
   @Prop({ required: true })
   dateRetour: Date;
+
+  @Prop({ required: true, enum: ['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED', 'PAID'], default: 'SUBMITTED' })
+  status: string;
+
+  @Prop({ required: false })
+  agenceVoyage: string;
+
+  @Prop({ required: false })
+  submittedAt: Date;
+
+  @Prop({ required: false })
+  approvedAt: Date;
+
+  @Prop({ required: false })
+  approvedById: string;
 }
 
 export const TravelTicketSchema = SchemaFactory.createForClass(TravelTicket);
+
+
+

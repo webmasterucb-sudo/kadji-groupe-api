@@ -8,7 +8,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 // import { FormulairesModule } from './applications/marketing-apps/formulaires/formulaires.module';
 // import { FinanceAppModule } from './applications/finance-app/finance-app.module';
 import { MailchimpService } from './shared/mailChimp/mailChimp.service';
+
 import { CeoCoreModule } from './applications/ceo-office-app/ceo-office-app.module';
+import { AuthModule } from './core/auth/auth.module';
+import { UsersModule } from './core/users/users.module';
+import { MailModule } from './core/mail/mail.module';
+import { PublicRoutesModule } from './applications/ceo-office-app/PUBLIC-ROUTES/public-routes.module';
 
 @Module({
   imports: [
@@ -30,8 +35,12 @@ import { CeoCoreModule } from './applications/ceo-office-app/ceo-office-app.modu
     // FinanceAppModule,
 
     CeoCoreModule,
+    AuthModule,
+    UsersModule,
+    MailModule,
+    PublicRoutesModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

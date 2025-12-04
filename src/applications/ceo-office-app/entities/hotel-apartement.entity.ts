@@ -14,31 +14,37 @@ export class HotelApartement {
     @Prop({ required: true })
     prenomOccupant: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
+    entrepriseOccupant?: string;
+
+    @Prop({ required: false })
+    entreprisePayante?: string;
+
+    @Prop({ required: false })
     nightlyRate: number;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     numberOfNights: number;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     breakfastAmount: number;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     lunchAmount: number;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     dinnerAmount: number;
 
     @Prop()
     extrasDescription?: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     extrasAmount: number;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     checkInDate: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     checkOutDate: string;
 
     @Prop()

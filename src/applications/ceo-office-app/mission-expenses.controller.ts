@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../../core/auth/guards/jwt-auth.guard';
 import { MissionExpensesService } from './mission-expenses.service';
 import { CreateMissionExpenseDto } from './dto/create-mission-expense.dto';
 import { UpdateMissionExpenseDto } from './dto/update-mission-expense.dto';
 
 @Controller('mission-expenses')
+@UseGuards(JwtAuthGuard)
 export class MissionExpensesController {
     constructor(private readonly missionExpensesService: MissionExpensesService) { }
 

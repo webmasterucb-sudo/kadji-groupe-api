@@ -10,6 +10,14 @@ export class CreateHotelApartementDto {
     @IsString()
     prenomOccupant: string;
 
+    @IsString()
+    @IsOptional()
+    entrepriseOccupant?: string;
+
+    @IsString()
+    @IsOptional()
+    entreprisePayante?: string;
+
     @IsNumber()
     nightlyRate: number;
 
@@ -58,3 +66,52 @@ export class CreateHotelApartementDto {
     @IsOptional()
     createdById?: string;
 }
+
+
+
+
+
+
+// export interface AppartementMeubleDTO {
+ 
+//   bookingId: string; 
+//   employeeName: string;
+//   employeeFirstName: string;
+//   employeeCompany: string;     
+//   department: string;          
+
+//   payerCompany: string;        
+//   nightlyRate: number;         
+//   totalAmount: number;         
+//   currency: string;
+
+//   residenceName: string;       
+//   checkInDate: string;         
+//   checkOutDate: string;        
+//   numberOfNights: number;
+  
+//   status: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
+// }
+
+
+
+
+// export interface AppartementVideDTO {
+//   id: string; 
+ 
+//   employeeName: string;
+//   employeeCompany: string;
+//   department: string;
+//   payerCompany: string;         
+//   monthlyRent: number;          
+//   securityDeposit: number;      
+//   currency: string;             
+//   residenceName: string;
+//   apartmentType: 'STUDIO' | '2CHAM' | '3CHAM' | '4CHAM';
+
+//   startDate: string;            
+//   endDate: string;              
+  
+//   isRenewAlertActive: boolean;  
+//   daysRemaining: number; 
+// }

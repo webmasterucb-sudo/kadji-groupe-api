@@ -14,6 +14,13 @@ import { MissionExpense, MissionExpenseSchema } from './entities/mission-expense
 import { HotelApartementController } from './hotel-apartement.controller';
 import { HotelApartementService } from './hotel-apartement.service';
 import { HotelApartement, HotelApartementSchema } from './entities/hotel-apartement.entity';
+import { AppartementMeubleController } from './appartement-meuble.controller';
+import { AppartementMeubleService } from './appartement-meuble.service';
+import { AppartementMeuble, AppartementMeubleSchema } from './entities/appartement-meuble.entity';
+import { AppartementVideController } from './appartement-vide.controller';
+import { AppartementVideService } from './appartement-vide.service';
+import { AppartementVide, AppartementVideSchema } from './entities/appartement-vide.entity';
+import { PublicRoutesModule } from './PUBLIC-ROUTES/public-routes.module';
 
 
 @Module({
@@ -23,9 +30,12 @@ import { HotelApartement, HotelApartementSchema } from './entities/hotel-apartem
       { name: Employee.name, schema: EmployeeSchema },
       { name: MissionExpense.name, schema: MissionExpenseSchema },
       { name: HotelApartement.name, schema: HotelApartementSchema },
-    ])
+      { name: AppartementMeuble.name, schema: AppartementMeubleSchema },
+      { name: AppartementVide.name, schema: AppartementVideSchema },
+    ]),
+    PublicRoutesModule
   ],
-  controllers: [TravelTicketsController, EmployeeController, MissionExpensesController, HotelApartementController],
-  providers: [TravelTicketsService, EmployeeService, MissionExpensesService, HotelApartementService],
+  controllers: [TravelTicketsController, EmployeeController, MissionExpensesController, HotelApartementController, AppartementMeubleController, AppartementVideController],
+  providers: [TravelTicketsService, EmployeeService, MissionExpensesService, HotelApartementService, AppartementMeubleService, AppartementVideService],
 })
 export class CeoCoreModule { }

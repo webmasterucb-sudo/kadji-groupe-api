@@ -1,7 +1,7 @@
 export class CreateCeoOfficeAppDto { }
 
 // src/travel-tickets/dto/create-travel-ticket.dto.ts
-import { IsString, IsNotEmpty, IsNumber, IsDateString, Matches, Min, MinLength } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsDateString, Matches, Min, MinLength, IsDate, IsOptional } from 'class-validator';
 
 export class CreateTravelTicketDto {
   @IsString()
@@ -35,12 +35,14 @@ export class CreateTravelTicketDto {
   @IsNotEmpty()
   motifVoyage: string;
 
+  @IsString()
+  devises: string;
+
   @IsNumber()
   @Min(0)
   prixBilletAvion: number;
 
   @IsString()
-  @IsNotEmpty()
   classe: string;
 
   @IsString()
@@ -48,22 +50,37 @@ export class CreateTravelTicketDto {
   projet: string;
 
   @IsString()
-  @IsNotEmpty()
   @Matches(/^[A-Z]{3}$/, { message: 'Provenance code must be 3 uppercase letters' })
   provenanceCodeAeroport: string;
 
   @IsString()
-  @IsNotEmpty()
   @Matches(/^[A-Z]{3}$/, { message: 'Destination code must be 3 uppercase letters' })
   destinationCodeAeroport: string;
 
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
-  dateDepart: string;
+  dateDepart: Date;
 
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
-  dateRetour: string;
+  dateRetour: Date;
+
+  @IsDate()
+  submittedAt: Date;
+
+  @IsString()
+  @IsOptional()
+  status: string;
+
+  @IsString()
+  @IsOptional()
+  agenceVoyage: string;
+
+  @IsDate()
+  approvedAt: Date;
+
+  @IsString()
+  approvedById: string;
 }
 
 

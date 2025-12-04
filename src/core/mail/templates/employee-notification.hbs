@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Notification Employé</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+        .content h2 {
+            color: #764ba2;
+            margin-top: 0;
+        }
+        .message-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid #764ba2;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        .footer {
+            background-color: #eeeeee;
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Notification UCB Connect</h1>
+        </div>
+        <div class="content">
+            <h2>Bonjour {{name}},</h2>
+            <p>Vous avez reçu une nouvelle notification importante :</p>
+            <div class="message-box">
+                "{{message}}"
+            </div>
+            <p>Merci de votre attention.</p>
+            <p>Cordialement,<br>L'équipe UCB Connect</p>
+        </div>
+        <div class="footer">
+            &copy; 2025 UCB Connect. Tous droits réservés.
+        </div>
+    </div>
+</body>
+</html>
