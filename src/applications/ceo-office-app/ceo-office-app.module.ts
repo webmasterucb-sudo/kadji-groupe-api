@@ -21,6 +21,8 @@ import { AppartementVideController } from './appartement-vide.controller';
 import { AppartementVideService } from './appartement-vide.service';
 import { AppartementVide, AppartementVideSchema } from './entities/appartement-vide.entity';
 import { PublicRoutesModule } from './PUBLIC-ROUTES/public-routes.module';
+import { DashboardController } from './dashboard/dashboard.controller';
+import { DashboardService } from './dashboard/dashboard.service';
 
 
 @Module({
@@ -35,7 +37,7 @@ import { PublicRoutesModule } from './PUBLIC-ROUTES/public-routes.module';
     ]),
     PublicRoutesModule
   ],
-  controllers: [TravelTicketsController, EmployeeController, MissionExpensesController, HotelApartementController, AppartementMeubleController, AppartementVideController],
-  providers: [TravelTicketsService, EmployeeService, MissionExpensesService, HotelApartementService, AppartementMeubleService, AppartementVideService],
+  controllers: [TravelTicketsController, EmployeeController, MissionExpensesController, HotelApartementController, AppartementMeubleController, AppartementVideController, DashboardController],
+  providers: [TravelTicketsService, EmployeeService, MissionExpensesService, HotelApartementService, AppartementMeubleService, AppartementVideService, DashboardService],
 })
 export class CeoCoreModule { }
