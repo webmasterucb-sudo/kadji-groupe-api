@@ -4,16 +4,29 @@ import { Model } from 'mongoose';
 import { CreateTravelTicketPublicDto } from './dto/create-travel-ticket-public.dto';
 import { UpdateTravelTicketPublicDto } from './dto/update-travel-ticket-public.dto';
 import { TravelTicket } from '../entities/ceo-office-app.entity';
+import { MailService } from 'src/core/mail/mail.service';
 
 @Injectable()
 export class TravelTicketPublicService {
     constructor(
         @InjectModel(TravelTicket.name) private travelTicketPublicModel: Model<TravelTicket>,
+        private readonly mailService: MailService,
     ) { }
 
     async create(createTravelTicketPublicDto: CreateTravelTicketPublicDto): Promise<TravelTicket> {
         const createdTicket = new this.travelTicketPublicModel(createTravelTicketPublicDto);
         let data = await createdTicket.save();
+
+        // Send email notification
+        const validationLink = `https://kadji-groupe-operations-app.netlify.app/ceo-validation-director-interface/${data._id}`; // Placeholder link
+        await this.mailService.sendEmailToEmployee(
+            'christian.nana@sa-ucb.com',
+            'Nouvelle demande de billet de voyage',
+            `${createTravelTicketPublicDto.nom}  ${createTravelTicketPublicDto.prenom}`, // Assuming the recipient name is known or static for now
+            `Une nouvelle demande de billet de voyage a été créée pour.`,
+            validationLink
+        );
+
         return data;
     }
 
@@ -34,6 +47,13 @@ export class TravelTicketPublicService {
 
     async remove(id: string): Promise<TravelTicket | null> {
         let data = await this.travelTicketPublicModel.findByIdAndDelete(id).exec();
+        return data;
+    }
+
+
+
+    async onAprouveDemande(id: string, isAprouve: boolean): Promise<TravelTicket | null> {
+        let data = await this.travelTicketPublicModel.findByIdAndUpdate(id, { status: isAprouve ? 'APPROVED' : 'REJECTED' }, { new: true }).exec();
         return data;
     }
 }

@@ -1,41 +1,43 @@
 import { Module } from '@nestjs/common';
 
 import { MailService } from './mail.service';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { ConfigService } from '@nestjs/config';
-import { join } from 'path';
+import { Client } from '@microsoft/microsoft-graph-client';
+import { ClientSecretCredential } from '@azure/identity';
+import 'isomorphic-fetch';
 
 import { MailController } from './mail.controller';
 
 @Module({
-    imports: [
-        MailerModule.forRootAsync({
-            useFactory: async (config: ConfigService) => ({
-                transport: {
-                    host: config.get('MAIL_HOST'),
-                    secure: false,
-                    auth: {
-                        user: config.get('MAIL_USER'),
-                        pass: config.get('MAIL_PASSWORD'),
-                    },
-                },
-                defaults: {
-                    from: `"No Reply" <${config.get('MAIL_FROM')}>`,
-                },
-                template: {
-                    dir: join(__dirname, 'templates'),
-                    adapter: new HandlebarsAdapter(),
-                    options: {
-                        strict: true,
-                    },
-                },
-            }),
-            inject: [ConfigService],
-        }),
-    ],
     controllers: [MailController],
-    providers: [MailService],
+    providers: [
+        MailService,
+        {
+            provide: 'GRAPH_CLIENT',
+            useFactory: async (configService: ConfigService) => {
+                const tenantId = configService.get<string>('AZURE_TENANT_ID');
+                const clientId = configService.get<string>('AZURE_CLIENT_ID');
+                const clientSecret = configService.get<string>('AZURE_CLIENT_SECRET');
+
+                if (!tenantId || !clientId || !clientSecret) {
+                    console.error('Azure credentials are missing in .env');
+                    return null;
+                }
+
+                const credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
+
+                return Client.initWithMiddleware({
+                    authProvider: {
+                        getAccessToken: async () => {
+                            const token = await credential.getToken('https://graph.microsoft.com/.default');
+                            return token.token;
+                        },
+                    },
+                });
+            },
+            inject: [ConfigService],
+        },
+    ],
     exports: [MailService],
 })
 export class MailModule { }

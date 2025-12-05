@@ -45,6 +45,10 @@ export class CreateTravelTicketPublicDto {
     dateRetour: Date;
 
     @IsString()
+    @IsOptional()
+    emailValidateur?: string;
+
+    @IsString()
     @IsEnum(['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED', 'PAID'])
     @IsOptional()
     status?: string;

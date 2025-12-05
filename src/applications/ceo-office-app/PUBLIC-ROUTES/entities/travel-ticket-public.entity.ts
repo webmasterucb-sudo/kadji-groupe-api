@@ -43,7 +43,11 @@ export class TravelTicket extends Document {
     approvedAt: Date;
 
     @Prop({ required: false })
+    emailValidateur?: string;
+
+    @Prop({ required: false })
     approvedById: string;
 }
 
 export const TravelTicketPublicSchema = SchemaFactory.createForClass(TravelTicket);
+

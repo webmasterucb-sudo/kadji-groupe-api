@@ -33,4 +33,17 @@ export class TravelTicketPublicController {
     remove(@Param('id') id: string) {
         return this.travelTicketPublicService.remove(id);
     }
+
+    @Post("aprouve-demande")
+    onAprouve(@Body('id') id: string, @Body('isAprouve') isAprouve: boolean) {
+        return this.travelTicketPublicService.onAprouveDemande(id, isAprouve);
+    }
+
+
+
+
+
+
+
+
 }
