@@ -57,6 +57,14 @@ export class CreateTravelTicketDto {
   @Matches(/^[A-Z]{3}$/, { message: 'Destination code must be 3 uppercase letters' })
   destinationCodeAeroport: string;
 
+  @IsString()
+  @IsOptional()
+  paysProvenance: string;
+
+  @IsString()
+  @IsOptional()
+  paysDestination: string;
+
   @IsDate()
   @IsNotEmpty()
   dateDepart: Date;
@@ -67,6 +75,16 @@ export class CreateTravelTicketDto {
 
   @IsDate()
   submittedAt: Date;
+
+  @IsNumber()
+  coutAdditionnel: number;
+
+  @IsString()
+  motifCoutAdditionnel: string;
+
+  @IsString()
+  @IsOptional()
+  adminEmail: string;
 
   @IsString()
   @IsOptional()

@@ -5,7 +5,7 @@ import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
 
-@Controller('auth')
+@Controller('auth-administrateurs')
 export class AuthController {
     constructor(private authService: AuthService, private usersService: UsersService) { }
 
@@ -46,4 +46,6 @@ export class AuthController {
     onUpdateUser(@Body() req) {
         return this.usersService.updateOne(req.user.id, req);
     }
+
+
 }

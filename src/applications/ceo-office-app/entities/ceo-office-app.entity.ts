@@ -32,6 +32,12 @@ export class TravelTicket extends Document {
   // @Prop({ required: false, min: 0 })
   prixBilletAvion: number;
 
+  @Prop({ required: false, default: 0 })
+  coutAdditionnel: number;
+
+  @Prop({ required: false, default: '' })
+  motifCoutAdditionnel: string;
+
   @Prop({ required: true })
   classe: string;
 
@@ -43,6 +49,12 @@ export class TravelTicket extends Document {
 
   @Prop({ required: false, match: /^[A-Z]{3}$/ })
   destinationCodeAeroport: string;
+
+  @Prop({ required: false })
+  paysProvenance: string;
+
+  @Prop({ required: false })
+  paysDestination: string;
 
   @Prop({ required: true })
   dateDepart: Date;
@@ -64,6 +76,9 @@ export class TravelTicket extends Document {
 
   @Prop({ required: false })
   approvedById: string;
+
+  @Prop({ required: false })
+  adminEmail: string;
 }
 
 export const TravelTicketSchema = SchemaFactory.createForClass(TravelTicket);

@@ -23,6 +23,11 @@ import { AppartementVide, AppartementVideSchema } from './entities/appartement-v
 import { PublicRoutesModule } from './PUBLIC-ROUTES/public-routes.module';
 import { DashboardController } from './dashboard/dashboard.controller';
 import { DashboardService } from './dashboard/dashboard.service';
+import { UsersParametresModule } from './PARAMETRES-ROUTES/users-parametres.module';
+import { EntrepriseModule } from './PARAMETRES-ROUTES/entreprise.module';
+import { ValidateurEmailModule } from './PARAMETRES-ROUTES/validateur-email.module';
+import { HotelParametreModule } from './PARAMETRES-ROUTES/hotel-parametre.module';
+import { FournisseurBilletModule } from './PARAMETRES-ROUTES/fournisseur-billet.module';
 
 
 @Module({
@@ -35,7 +40,12 @@ import { DashboardService } from './dashboard/dashboard.service';
       { name: AppartementMeuble.name, schema: AppartementMeubleSchema },
       { name: AppartementVide.name, schema: AppartementVideSchema },
     ]),
-    PublicRoutesModule
+    PublicRoutesModule,
+    UsersParametresModule,
+    EntrepriseModule,
+    ValidateurEmailModule,
+    HotelParametreModule,
+    FournisseurBilletModule
   ],
   controllers: [TravelTicketsController, EmployeeController, MissionExpensesController, HotelApartementController, AppartementMeubleController, AppartementVideController, DashboardController],
   providers: [TravelTicketsService, EmployeeService, MissionExpensesService, HotelApartementService, AppartementMeubleService, AppartementVideService, DashboardService],

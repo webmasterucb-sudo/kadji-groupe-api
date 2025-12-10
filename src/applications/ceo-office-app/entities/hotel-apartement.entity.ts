@@ -5,13 +5,13 @@ export type HotelApartementDocument = HotelApartement & Document;
 
 @Schema({ timestamps: true })
 export class HotelApartement {
-    @Prop({ required: true })
+    @Prop({ required: false })
     hotelName: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     nomOccupant: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     prenomOccupant: string;
 
     @Prop({ required: false })

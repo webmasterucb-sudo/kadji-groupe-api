@@ -1,10 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type AdminUserDocument = AdminUser & Document;
-
-@Schema({ timestamps: true })
-export class AdminUser {
+@Schema({ timestamps: true, collection: 'users_parametres' })
+export class AdminUser extends Document {
   @Prop({ required: true, maxlength: 100 })
   nom: string;
 
