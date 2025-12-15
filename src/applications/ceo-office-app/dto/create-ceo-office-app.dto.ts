@@ -1,7 +1,7 @@
 export class CreateCeoOfficeAppDto { }
 
 // src/travel-tickets/dto/create-travel-ticket.dto.ts
-import { IsString, IsNotEmpty, IsNumber, IsDateString, Matches, Min, MinLength, IsDate, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsDateString, Matches, Min, MinLength, IsDate, IsOptional, IsEmail } from 'class-validator';
 
 export class CreateTravelTicketDto {
   @IsString()
@@ -15,27 +15,31 @@ export class CreateTravelTicketDto {
   prenom: string;
 
   @IsString()
-  @IsNotEmpty()
-  @Matches(/^[A-Z0-9]+$/, { message: 'Matricule must be alphanumeric uppercase' })
+  @IsOptional()
   matricule: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   entreprise: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   departement: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   fonction: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsEmail()
+  emailDemandeur: string;
+
+  @IsString()
+  @IsOptional()
   motifVoyage: string;
 
   @IsString()
+  @IsOptional()
   devises: string;
 
   @IsNumber()
@@ -43,10 +47,11 @@ export class CreateTravelTicketDto {
   prixBilletAvion: number;
 
   @IsString()
+  @IsOptional()
   classe: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   projet: string;
 
   @IsString()
@@ -59,18 +64,18 @@ export class CreateTravelTicketDto {
 
   @IsString()
   @IsOptional()
-  paysProvenance: string;
+  villeProvenance: string;
 
   @IsString()
   @IsOptional()
-  paysDestination: string;
+  villeDestination: string;
 
   @IsDate()
-  @IsNotEmpty()
+  @IsOptional()
   dateDepart: Date;
 
   @IsDate()
-  @IsNotEmpty()
+  @IsOptional()
   dateRetour: Date;
 
   @IsDate()
@@ -93,6 +98,10 @@ export class CreateTravelTicketDto {
   @IsString()
   @IsOptional()
   agenceVoyage: string;
+
+  @IsString()
+  @IsOptional()
+  emailValidateur: string;
 
   @IsDate()
   approvedAt: Date;

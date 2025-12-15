@@ -2,8 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { HotelApartementService } from './hotel-apartement.service';
 import { CreateHotelApartementDto } from './dto/create-hotel-apartement.dto';
 import { UpdateHotelApartementDto } from './dto/update-hotel-apartement.dto';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../../core/auth/guards/jwt-auth.guard';
 
 @Controller('hotel-apartements')
+@UseGuards(JwtAuthGuard)
 export class HotelApartementController {
     constructor(private readonly hotelApartementService: HotelApartementService) { }
 

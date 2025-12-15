@@ -3,33 +3,36 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: false })
 export class TravelTicket extends Document {
-  @Prop({ required: true, minlength: 2 })
+  @Prop({ required: false, minlength: 2, default: '' })
   nom: string;
 
-  @Prop({ required: true, minlength: 2 })
+  @Prop({ required: false, minlength: 2, default: '' })
   prenom: string;
 
-  @Prop({ required: true, unique: true, match: /^[A-Z0-9]+$/ })
+  @Prop({ required: false, unique: false, default: '' })
   matricule: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: '' })
   entreprise: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: '' })
   departement: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: '' })
   fonction: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, match: /^\S+@\S+\.\S+$/ })
+  emailDemandeur: string;
+
+  @Prop({ required: false, default: '' })
   motifVoyage: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false, default: '' })
   devises: string;
 
-  // @Prop({ required: false, min: 0 })
+  @Prop({ required: false, min: 0 })
   prixBilletAvion: number;
 
   @Prop({ required: false, default: 0 })
@@ -38,10 +41,10 @@ export class TravelTicket extends Document {
   @Prop({ required: false, default: '' })
   motifCoutAdditionnel: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: '' })
   classe: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: '' })
   projet: string;
 
   @Prop({ required: false, match: /^[A-Z]{3}$/ })
@@ -50,38 +53,37 @@ export class TravelTicket extends Document {
   @Prop({ required: false, match: /^[A-Z]{3}$/ })
   destinationCodeAeroport: string;
 
-  @Prop({ required: false })
-  paysProvenance: string;
+  @Prop({ required: false, default: '' })
+  villeProvenance: string;
 
-  @Prop({ required: false })
-  paysDestination: string;
+  @Prop({ required: false, default: '' })
+  villeDestination: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: new Date() })
   dateDepart: Date;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: new Date() })
   dateRetour: Date;
 
-  @Prop({ required: true, enum: ['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED', 'PAID'], default: 'SUBMITTED' })
+  @Prop({ required: false, enum: ['CANCELLED', 'SUBMITTED', 'APPROVED', 'REJECTED', 'ON_PROCESSING', 'PAID'], default: 'SUBMITTED' })
   status: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false, default: '' })
   agenceVoyage: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false, default: new Date() })
   submittedAt: Date;
 
-  @Prop({ required: false })
+  @Prop({ required: false, default: new Date() })
   approvedAt: Date;
 
-  @Prop({ required: false })
+  @Prop({ required: false, default: '' })
   approvedById: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false, match: /^\S+@\S+\.\S+$/ })
   adminEmail: string;
 }
 
 export const TravelTicketSchema = SchemaFactory.createForClass(TravelTicket);
-
 
 

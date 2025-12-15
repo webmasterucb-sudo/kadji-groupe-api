@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateHotelApartementDto } from './dto/create-hotel-apartement.dto';
-import { UpdateHotelApartementDto } from './dto/update-hotel-apartement.dto';
-import { HotelApartement } from './entities/hotel-apartement.entity';
 import { MailService } from 'src/core/mail/mail.service';
+import { HotelApartement } from '../entities/hotel-apartement.entity';
+import { CreateHotelApartementDto } from '../dto/create-hotel-apartement.dto';
+import { UpdateHotelApartementDto } from '../dto/update-hotel-apartement.dto';
+
 
 @Injectable()
 export class HotelApartementService {
@@ -19,7 +20,7 @@ export class HotelApartementService {
 
         // Send email notification
         const validationLink = `https://kadji-groupe-operations-app.netlify.app/ceo-validation-director-interface/hotel/${data._id}`;
-        await this.mailService.sendEmailToEmployee(
+        await this.mailService.sendEmailToValidateur(
             'christian.nana@sa-ucb.com',
             'Nouvelle demande de réservation d\'hôtel',
             `${createHotelApartementDto.nomOccupant} ${createHotelApartementDto.prenomOccupant}`,

@@ -3,8 +3,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CreateAppartementMeubleDto } from './dto/create-appartement-meuble.dto';
 import { UpdateAppartementMeubleDto } from './dto/update-appartement-meuble.dto';
 import { AppartementMeubleService } from './appartement-meuble.service';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 
 @Controller('appartement-meuble')
+@UseGuards(JwtAuthGuard)
 export class AppartementMeubleController {
     constructor(private readonly appartementMeubleService: AppartementMeubleService) { }
 
@@ -33,3 +36,4 @@ export class AppartementMeubleController {
         return this.appartementMeubleService.remove(id);
     }
 }
+

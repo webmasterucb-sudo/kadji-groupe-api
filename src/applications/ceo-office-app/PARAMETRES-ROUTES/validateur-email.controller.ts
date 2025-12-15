@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ValidateurEmailService } from './validateur-email.service';
 import { CreateValidateurEmailDto } from './dto/create-validateur-email.dto';
 import { UpdateValidateurEmailDto } from './dto/update-validateur-email.dto';
+import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 
 @Controller('validateurs-emails')
+@UseGuards(JwtAuthGuard)
 export class ValidateurEmailController {
     constructor(private readonly validateurEmailService: ValidateurEmailService) { }
 

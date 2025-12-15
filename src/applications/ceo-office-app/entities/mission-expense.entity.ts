@@ -11,32 +11,32 @@ export class MissionExpense {
     @Prop({ required: true })
     prenom: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     matricule: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false, default: '' })
     entreprise: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false, default: '' })
     departement: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false, default: '' })
     pays: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false, default: 0 })
     nombreDeJours: number;
 
-    @Prop({ required: true })
+    @Prop({ required: false, default: '' })
     devise: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false, default: 0 })
     montant: number;
 
-    @Prop({ required: true })
+    @Prop({ required: false, default: '' })
     motif: string;
 
     @Prop({
-        required: true,
+        required: false,
         enum: ['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED', 'PAID'],
         default: 'DRAFT',
     })
@@ -51,7 +51,7 @@ export class MissionExpense {
     @Prop()
     approvedById?: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     createdById: string;
 }
 

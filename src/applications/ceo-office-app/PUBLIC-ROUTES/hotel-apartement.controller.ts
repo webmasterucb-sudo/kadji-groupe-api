@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { HotelApartementService } from './hotel-apartement.service';
-import { CreateHotelApartementDto } from './dto/create-hotel-apartement.dto';
-import { UpdateHotelApartementDto } from './dto/update-hotel-apartement.dto';
+import { CreateHotelApartementDto } from '../dto/create-hotel-apartement.dto';
+import { UpdateHotelApartementDto } from '../dto/update-hotel-apartement.dto';
 
 @Controller('public/hotel-apartements')
 export class HotelApartementController {
@@ -38,3 +38,6 @@ export class HotelApartementController {
         return this.hotelApartementService.onAprouveDemande(id, isAprouve);
     }
 }
+
+
+

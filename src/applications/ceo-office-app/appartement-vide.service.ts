@@ -17,7 +17,7 @@ export class AppartementVideService {
     }
 
     async findAll(): Promise<AppartementVide[]> {
-        return this.appartementVideModel.find().sort({ createdAt: -1 }).exec();
+        return this.appartementVideModel.find().sort({ updatedAt: -1 }).exec();
     }
 
     async findOne(id: string): Promise<AppartementVide> {

@@ -41,10 +41,18 @@ export class CreateHotelApartementDto {
     extrasAmount: number;
 
     @IsDateString()
-    checkInDate: string;
+    checkInDate: Date;
 
     @IsDateString()
-    checkOutDate: string;
+    checkOutDate: Date;
+
+    @IsString()
+    @IsOptional()
+    ville?: string;
+
+    @IsString()
+    @IsOptional()
+    paysDestination?: string;
 
     @IsNumber()
     @IsOptional()

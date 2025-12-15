@@ -5,28 +5,28 @@ export type AppartementVideDocument = AppartementVide & Document;
 
 @Schema({ timestamps: true })
 export class AppartementVide {
-    @Prop({ required: true })
+    @Prop({ required: true, default: '' })
     employeeName: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: '' })
     employeeCompany: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: '' })
     department: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: '' })
     payerCompany: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: 0 })
     monthlyRent: number;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: 0 })
     securityDeposit: number;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: '' })
     currency: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: '' })
     residenceName: string;
 
     @Prop({
@@ -35,10 +35,10 @@ export class AppartementVide {
     })
     apartmentType: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: '' })
     startDate: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: '' })
     endDate: string;
 
     @Prop({ required: true, default: false })
@@ -46,6 +46,13 @@ export class AppartementVide {
 
     @Prop({ required: true, default: 0 })
     daysRemaining: number;
+
+
+    @Prop({ required: true, enum: ['RESERVE', 'CONFIRME', 'ANNULE', 'FACTURE', 'PAYE'], default: 'RESERVE' })
+    status: 'RESERVE' | 'CONFIRME' | 'ANNULE' | 'FACTURE' | 'PAYE';
+
+    @Prop({ required: true, default: '' })
+    notes: string;
 }
 
 export const AppartementVideSchema = SchemaFactory.createForClass(AppartementVide);

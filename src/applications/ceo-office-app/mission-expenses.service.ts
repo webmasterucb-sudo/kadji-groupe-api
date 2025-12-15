@@ -5,7 +5,7 @@ import { MissionExpense, MissionExpenseDocument } from './entities/mission-expen
 import { CreateMissionExpenseDto } from './dto/create-mission-expense.dto';
 import { UpdateMissionExpenseDto } from './dto/update-mission-expense.dto';
 
-@Injectable()  
+@Injectable()
 export class MissionExpensesService {
     constructor(
         @InjectModel(MissionExpense.name) private missionExpenseModel: Model<MissionExpenseDocument>,
@@ -17,7 +17,7 @@ export class MissionExpensesService {
     }
 
     async findAll(): Promise<MissionExpense[]> {
-        return this.missionExpenseModel.find().sort({ createdAt: -1 }).exec();
+        return this.missionExpenseModel.find().sort({ updatedAt: -1 }).exec();
     }
 
     async findOne(id: string): Promise<MissionExpense> {

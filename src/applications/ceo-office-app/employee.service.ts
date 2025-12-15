@@ -7,9 +7,9 @@ import { UpdateEmployeeDto } from './dto/update-employee.dto';
 
 @Injectable()
 export class EmployeeService {
-  constructor( 
+  constructor(
     @InjectModel(Employee.name) private employeeModel: Model<EmployeeDocument>,
-  ) {}
+  ) { }
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
     try {
@@ -21,10 +21,10 @@ export class EmployeeService {
       }
       throw error;
     }
-  } 
+  }
 
   async findAll(): Promise<Employee[]> {
-    return await this.employeeModel.find().sort({ createdAt: -1 }).exec();
+    return await this.employeeModel.find().sort({ updatedAt: -1 }).exec();
   }
 
   async findOne(id: string): Promise<Employee> {
@@ -48,11 +48,11 @@ export class EmployeeService {
       const updatedEmployee = await this.employeeModel
         .findByIdAndUpdate(id, updateEmployeeDto, { new: true })
         .exec();
-      
+
       if (!updatedEmployee) {
         throw new NotFoundException(`Employé avec l'ID ${id} non trouvé`);
       }
-      
+
       return updatedEmployee;
     } catch (error) {
       if (error.code === 11000) {

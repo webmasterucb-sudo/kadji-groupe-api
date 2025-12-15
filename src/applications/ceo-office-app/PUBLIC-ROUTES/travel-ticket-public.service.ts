@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateTravelTicketPublicDto } from './dto/create-travel-ticket-public.dto';
-import { UpdateTravelTicketPublicDto } from './dto/update-travel-ticket-public.dto';
 import { TravelTicket } from '../entities/ceo-office-app.entity';
 import { MailService } from 'src/core/mail/mail.service';
+import { CreateTravelTicketDto } from '../dto/create-ceo-office-app.dto';
+import { UpdateTravelTicketDto } from '../dto/update-ceo-office-app.dto';
 
 @Injectable()
 export class TravelTicketPublicService {
@@ -13,14 +13,14 @@ export class TravelTicketPublicService {
         private readonly mailService: MailService,
     ) { }
 
-    async create(createTravelTicketPublicDto: CreateTravelTicketPublicDto): Promise<TravelTicket> {
+    async create(createTravelTicketPublicDto: CreateTravelTicketDto): Promise<TravelTicket> {
         const createdTicket = new this.travelTicketPublicModel(createTravelTicketPublicDto);
         let data = await createdTicket.save();
 
         // Send email notification
-        // const validationLink = `http://localhost:4200/ceo-validation-director-interface/${data._id}`;
-        const validationLink = `https://kadji-groupe-operations-app.netlify.app/ceo-validation-director-interface/${data._id}`; // Placeholder link
-        await this.mailService.sendEmailToEmployee(
+        const validationLink = `http://localhost:4200/ceo-validation-director-interface/${data._id}`;
+        // const validationLink = `https://kadji-groupe-operations-app.netlify.app/ceo-validation-director-interface/${data._id}`; // Placeholder link
+        await this.mailService.sendEmailToValidateur(
             createTravelTicketPublicDto.emailValidateur,
             'Nouvelle demande de billet de voyage',
             `${createTravelTicketPublicDto.nom}  ${createTravelTicketPublicDto.prenom}`, // Assuming the recipient name is known or static for now
@@ -32,7 +32,7 @@ export class TravelTicketPublicService {
     }
 
     async findAll(): Promise<TravelTicket[]> {
-        let data = await this.travelTicketPublicModel.find().exec();
+        let data = await this.travelTicketPublicModel.find().sort({ updatedAt: -1 }).exec();
         return data;
     }
 
@@ -41,8 +41,8 @@ export class TravelTicketPublicService {
         return data;
     }
 
-    async update(id: string, updateTravelTicketPublicDto: UpdateTravelTicketPublicDto): Promise<TravelTicket | null> {
-        let data = await this.travelTicketPublicModel.findByIdAndUpdate(id, updateTravelTicketPublicDto, { new: true }).exec();
+    async update(id: string, updateTravelTicketDto: UpdateTravelTicketDto): Promise<TravelTicket | null> {
+        let data = await this.travelTicketPublicModel.findByIdAndUpdate(id, updateTravelTicketDto, { new: true }).exec();
         return data;
     }
 
@@ -54,7 +54,27 @@ export class TravelTicketPublicService {
 
 
     async onAprouveDemande(id: string, isAprouve: boolean): Promise<TravelTicket | null> {
-        let data = await this.travelTicketPublicModel.findByIdAndUpdate(id, { status: isAprouve ? 'APPROVED' : 'REJECTED' }, { new: true }).exec();
+        let status: string = isAprouve ? 'APPROVED' : 'REJECTED';
+        let data: any = await this.travelTicketPublicModel.findByIdAndUpdate(id, { status: status }, { new: true }).exec();
+        await this.mailService.sendTicketStatusNotification(
+            data.emailDemandeur,
+            `${data.nom} ${data.prenom}`,
+            status
+        );
+
+        if (isAprouve) {
+            await this.mailService.sendTicketPendingFinalApprovalToDirector(
+                "MOYENS GENEREAUX",
+                `${data.nom} ${data.prenom}`,
+                data.entreprise,
+                data.departement,
+                data.villeDestination,
+                data.dateDepart,
+            );
+        }
         return data;
     }
+
+
+
 }

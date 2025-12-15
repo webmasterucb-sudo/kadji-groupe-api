@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TravelTicketPublicService } from './travel-ticket-public.service';
-import { CreateTravelTicketPublicDto } from './dto/create-travel-ticket-public.dto';
-import { UpdateTravelTicketPublicDto } from './dto/update-travel-ticket-public.dto';
+import { CreateTravelTicketDto } from '../dto/create-ceo-office-app.dto';
+import { UpdateTravelTicketDto } from '../dto/update-ceo-office-app.dto';
+
+
 
 @Controller('public/travel-tickets')
 export class TravelTicketPublicController {
@@ -9,8 +11,8 @@ export class TravelTicketPublicController {
 
     @Post()
     // @UsePipes(new ValidationPipe({ transform: true }))
-    create(@Body() createTravelTicketPublicDto: CreateTravelTicketPublicDto) {
-        return this.travelTicketPublicService.create(createTravelTicketPublicDto);
+    create(@Body() createTravelTicketDto: CreateTravelTicketDto) {
+        return this.travelTicketPublicService.create(createTravelTicketDto);
     }
 
     @Get()
@@ -25,8 +27,8 @@ export class TravelTicketPublicController {
 
     @Patch(':id')
     @UsePipes(new ValidationPipe({ transform: true }))
-    update(@Param('id') id: string, @Body() updateTravelTicketPublicDto: UpdateTravelTicketPublicDto) {
-        return this.travelTicketPublicService.update(id, updateTravelTicketPublicDto);
+    update(@Param('id') id: string, @Body() updateTravelTicketDto: UpdateTravelTicketDto) {
+        return this.travelTicketPublicService.update(id, updateTravelTicketDto);
     }
 
     @Delete(':id')
@@ -38,11 +40,6 @@ export class TravelTicketPublicController {
     onAprouve(@Body('id') id: string, @Body('isAprouve') isAprouve: boolean) {
         return this.travelTicketPublicService.onAprouveDemande(id, isAprouve);
     }
-
-
-
-
-
 
 
 

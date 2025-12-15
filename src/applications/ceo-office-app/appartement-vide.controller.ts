@@ -3,9 +3,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CreateAppartementVideDto } from './dto/create-appartement-vide.dto';
 import { UpdateAppartementVideDto } from './dto/update-appartement-vide.dto';
 import { AppartementVideService } from './appartement-vide.service';
-
+import { UseGuards } from '@nestjs/common';
+// import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../core/auth/guards/jwt-auth.guard';
 
 @Controller('empty-apartments')
+@UseGuards(JwtAuthGuard)
 export class AppartementVideController {
     constructor(private readonly appartementVideService: AppartementVideService) { }
 

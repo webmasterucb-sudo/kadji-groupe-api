@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsEnum, IsDateString, IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsString, IsNumber, IsEnum, IsDateString, IsBoolean, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateAppartementVideDto {
     @IsString()
@@ -52,4 +52,13 @@ export class CreateAppartementVideDto {
     @IsNumber()
     @IsNotEmpty()
     daysRemaining: number;
+
+    @IsEnum(['RESERVE', 'CONFIRME', 'ANNULE', 'FACTURE', 'PAYE'])
+    @IsOptional()
+    status?: 'RESERVE' | 'CONFIRME' | 'ANNULE' | 'FACTURE' | 'PAYE';
+
+    @IsString()
+    @IsOptional()
+    notes?: string;
 }
+

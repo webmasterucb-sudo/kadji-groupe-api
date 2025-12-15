@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { FournisseurBilletService } from './fournisseur-billet.service';
 import { CreateFournisseurBilletDto } from './dto/create-fournisseur-billet.dto';
 import { UpdateFournisseurBilletDto } from './dto/update-fournisseur-billet.dto';
+import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 
 @Controller('fournisseurs-billets')
+@UseGuards(JwtAuthGuard)
 export class FournisseurBilletController {
     constructor(private readonly fournisseurBilletService: FournisseurBilletService) { }
 

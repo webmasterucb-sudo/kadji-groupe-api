@@ -9,7 +9,7 @@ import { TravelTicket } from './entities/ceo-office-app.entity';
 
 @Injectable()
 export class TravelTicketsService {
-  constructor(@InjectModel(TravelTicket.name) private travelTicketModel: Model<TravelTicket>) {}
+  constructor(@InjectModel(TravelTicket.name) private travelTicketModel: Model<TravelTicket>) { }
 
   async create(createTravelTicketDto: CreateTravelTicketDto): Promise<TravelTicket> {
     const createdTicket = new this.travelTicketModel(createTravelTicketDto);
@@ -17,7 +17,7 @@ export class TravelTicketsService {
   }
 
   async findAll(): Promise<TravelTicket[]> {
-    return this.travelTicketModel.find().exec();
+    return this.travelTicketModel.find().sort({ updatedAt: -1 }).exec();
   }
 
   async findOne(id: string): Promise<TravelTicket> {
@@ -46,3 +46,4 @@ export class TravelTicketsService {
     return deletedTicket;
   }
 }
+

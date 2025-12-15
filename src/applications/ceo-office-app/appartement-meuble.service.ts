@@ -17,7 +17,7 @@ export class AppartementMeubleService {
     }
 
     async findAll(): Promise<AppartementMeuble[]> {
-        return this.appartementMeubleModel.find().sort({ createdAt: -1 }).exec();
+        return this.appartementMeubleModel.find().sort({ updatedAt: -1 }).exec();
     }
 
     async findOne(id: string): Promise<AppartementMeuble> {

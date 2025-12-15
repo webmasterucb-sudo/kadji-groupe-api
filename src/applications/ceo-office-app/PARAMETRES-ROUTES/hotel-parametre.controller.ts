@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { HotelParametreService } from './hotel-parametre.service';
 import { CreateHotelParametreDto } from './dto/create-hotel-parametre.dto';
 import { UpdateHotelParametreDto } from './dto/update-hotel-parametre.dto';
+import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 
 @Controller('hotels-parametres')
+@UseGuards(JwtAuthGuard)
 export class HotelParametreController {
     constructor(private readonly hotelParametreService: HotelParametreService) { }
 

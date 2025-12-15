@@ -5,52 +5,58 @@ export type HotelApartementDocument = HotelApartement & Document;
 
 @Schema({ timestamps: true })
 export class HotelApartement {
-    @Prop({ required: false })
+    @Prop({ required: false, default: '' })
     hotelName: string;
 
-    @Prop({ required: false })
+    @Prop({ required: true, default: '' })
     nomOccupant: string;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: '' })
     prenomOccupant: string;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: '' })
     entrepriseOccupant?: string;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: '' })
     entreprisePayante?: string;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: 0 })
     nightlyRate: number;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: 0 })
     numberOfNights: number;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: 0 })
     breakfastAmount: number;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: 0 })
     lunchAmount: number;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: 0 })
     dinnerAmount: number;
 
-    @Prop()
+    @Prop({ required: false, default: '' })
     extrasDescription?: string;
 
-    @Prop({ required: false })
+    @Prop({ required: false, default: 0 })
     extrasAmount: number;
 
-    @Prop({ required: false })
-    checkInDate: string;
+    @Prop({ required: false, default: new Date() })
+    checkInDate: Date;
 
-    @Prop({ required: false })
-    checkOutDate: string;
+    @Prop({ required: false, default: new Date() })
+    checkOutDate: Date;
 
-    @Prop()
+    @Prop({ required: false, default: '' })
+    ville: string;
+
+    @Prop({ required: false, default: '' })
+    paysDestination: string;
+
+    @Prop({ required: false, default: 0 })
     totalAmount?: number;
 
-    @Prop()
+    @Prop({ required: false, default: '' })
     currency?: string;
 
     @Prop({
@@ -59,10 +65,10 @@ export class HotelApartement {
     })
     status?: string;
 
-    @Prop()
+    @Prop({ required: false, default: '' })
     notes?: string;
 
-    @Prop()
+    @Prop({ required: false, default: '' })
     createdById?: string;
 }
 

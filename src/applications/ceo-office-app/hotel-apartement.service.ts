@@ -17,7 +17,7 @@ export class HotelApartementService {
     }
 
     async findAll(): Promise<HotelApartement[]> {
-        return this.hotelApartementModel.find().sort({ createdAt: -1 }).exec();
+        return this.hotelApartementModel.find().sort({ updatedAt: -1 }).exec();
     }
 
     async findOne(id: string): Promise<HotelApartement> {

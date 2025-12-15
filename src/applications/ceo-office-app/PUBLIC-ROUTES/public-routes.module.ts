@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TravelTicketPublicController } from './travel-ticket-public.controller';
 import { TravelTicketPublicService } from './travel-ticket-public.service';
-import { TravelTicket, TravelTicketSchema } from '../entities/ceo-office-app.entity';
 import { MailModule } from 'src/core/mail/mail.module';
 import { HotelApartementController } from './hotel-apartement.controller';
 import { HotelApartementService } from './hotel-apartement.service';
-import { HotelApartement, HotelApartementSchema } from './entities/hotel-apartement.entity';
+import { HotelApartement, HotelApartementSchema } from '../entities/hotel-apartement.entity';
+import { TravelTicket, TravelTicketSchema } from '../entities/ceo-office-app.entity';
 
 @Module({
     imports: [

@@ -57,3 +57,8 @@ export class CreateAppartementMeubleDto {
     @IsOptional()
     status: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
 }
+
+
+
+
+
