@@ -21,7 +21,7 @@ export class TravelTicketsService {
   }
 
   async findOne(id: string): Promise<TravelTicket> {
-    const ticket = await this.travelTicketModel.findById(id).exec();
+    const ticket = await this.travelTicketModel.findById(id).exec();  
     if (!ticket) {
       throw new NotFoundException(`TravelTicket with ID ${id} not found`);
     }
