@@ -2,13 +2,12 @@ name: Build and deploy NestJS API to Azure Web App
 
 env:
   NODE_VERSION: '22.x'
-  AZURE_WEBAPP_NAME: 'api-ucb-connect'  # Remplacer par le nom de votre Azure Web App
+  AZURE_WEBAPP_NAME: 'kadjigroup-operation-api'  # Remplacer par le nom de votre Azure Web App
 
 on:
   push:
     branches:
-      - main
-      - preprod
+      - api_dev
   workflow_dispatch:
 
 jobs:
