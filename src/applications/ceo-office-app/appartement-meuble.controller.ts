@@ -6,7 +6,7 @@ import { AppartementMeubleService } from './appartement-meuble.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 
-@Controller('appartement-meuble')
+@Controller('appartement-meuble')  
 @UseGuards(JwtAuthGuard)
 export class AppartementMeubleController {
     constructor(private readonly appartementMeubleService: AppartementMeubleService) { }

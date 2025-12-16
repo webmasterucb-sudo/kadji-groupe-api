@@ -299,7 +299,7 @@ export class MailService {
                                
                                 <!-- Content -->
                                 <div style="padding: 40px 5px;">
-                                    <h2 style="color: #333333; margin-top: 0; font-size: 18px; margin-bottom: 25px;">
+                                    <h2 style="color: #333333; margin-left: 10px; margin-top: 0; font-size: 18px; margin-bottom: 15px;">
                                         DEPARTEMENT <span style="color: #b45c4eff;">${directorName}</span>,
                                     </h2>
                                     
