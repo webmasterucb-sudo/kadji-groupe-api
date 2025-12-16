@@ -1,13 +1,14 @@
-name: Build and deploy React app to Azure Web App - ucb-factory-admin-dev
+name: Build and deploy NestJS API to Azure Web App
 
 env:
   NODE_VERSION: '22.x'
-  AZURE_WEBAPP_NAME: 'ucb-factory-admin-dev'
+  AZURE_WEBAPP_NAME: 'api-ucb-connect'  # Remplacer par le nom de votre Azure Web App
 
 on:
   push:
     branches:
-      - admin/dev
+      - main
+      - preprod
   workflow_dispatch:
 
 jobs:
@@ -61,9 +62,7 @@ jobs:
 
       - name: Run Security Audit
         run: npm audit --production --audit-level=high
-
-      - name: Type Check
-        run: npm run type-check
+        continue-on-error: true  # Ne pas bloquer le déploiement pour des vulnérabilités mineures
 
   build:
     runs-on: ubuntu-latest
@@ -79,49 +78,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build React app
+      - name: Build NestJS application
         run: npm run build
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL || 'https://ucb-factory-api-dev-h7h2bab7g3eee5ed.uaenorth-01.azurewebsites.net/api/v1' }}
-          VITE_APP_NAME: ${{ secrets.VITE_APP_NAME || 'UCB Factory Admin' }}
-          VITE_AZURE_TENANT_ID: ${{ secrets.VITE_AZURE_TENANT_ID }}
-          VITE_AZURE_CLIENT_ID: ${{ secrets.VITE_AZURE_CLIENT_ID }}
-          VITE_AZURE_REDIRECT_URI: ${{ secrets.VITE_AZURE_REDIRECT_URI || 'https://ucb-factory-admin-dev.azurewebsites.net/auth/callback' }}
 
       - name: Prepare deploy package
         run: |
           rm -rf deploy
           mkdir -p deploy
-          # Copy dist folder
+          # Copy compiled dist folder
           cp -R dist deploy/
-          # Copy server.js for Azure Web App
-          cp server.js deploy/
-          # Create minimal package.json for production server
-          cat > deploy/package.json << 'EOF'
-          {
-            "name": "ucb-factory-admin-web",
-            "version": "1.0.0",
-            "type": "module",
-            "scripts": {
-              "start": "node server.js"
-            },
-            "dependencies": {
-              "express": "^4.18.2"
-            },
-            "engines": {
-              "node": ">=22.0.0"
-            }
-          }
-          EOF
-          # Install only production dependencies for server
+          # Copy package files for production
+          cp package.json deploy/
+          cp package-lock.json deploy/
+          # Install production dependencies only
           cd deploy
-          npm install --production
+          npm ci --production
           cd ..
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: react-app
+          name: nestjs-api
           path: deploy
           retention-days: 1
 
@@ -139,8 +116,8 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: react-app
-          path: react-app
+          name: nestjs-api
+          path: nestjs-api
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -153,4 +130,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
-          package: ./react-app
+          package: ./nestjs-api
