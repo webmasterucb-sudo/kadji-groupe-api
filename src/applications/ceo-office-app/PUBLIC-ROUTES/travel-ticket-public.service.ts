@@ -18,8 +18,8 @@ export class TravelTicketPublicService {
         let data = await createdTicket.save();
 
         // Send email notification
-        const validationLink = `http://localhost:4200/ceo-validation-director-interface/${data._id}`;
-        // const validationLink = `https://kadji-groupe-operations-app.netlify.app/ceo-validation-director-interface/${data._id}`; // Placeholder link
+        const validationLink = `http://localhost:4200/#/ceo-validation-director-interface/${data._id}`;
+        // const validationLink = `https://kadji-groupe-operations-app.netlify.app/#/ceo-validation-director-interface/${data._id}`; // Placeholder link
         await this.mailService.sendEmailToValidateur(
             createTravelTicketPublicDto.emailValidateur,
             'Nouvelle demande de billet de voyage',

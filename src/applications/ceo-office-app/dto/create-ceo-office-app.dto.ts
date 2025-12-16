@@ -1,7 +1,8 @@
 export class CreateCeoOfficeAppDto { }
 
+import { Prop } from '@nestjs/mongoose';
 // src/travel-tickets/dto/create-travel-ticket.dto.ts
-import { IsString, IsNotEmpty, IsNumber, IsDateString, Matches, Min, MinLength, IsDate, IsOptional, IsEmail } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsDateString, Matches, Min, MinLength, IsDate, IsOptional, IsEmail, IsBoolean } from 'class-validator';
 
 export class CreateTravelTicketDto {
   @IsString()
@@ -90,6 +91,10 @@ export class CreateTravelTicketDto {
   @IsString()
   @IsOptional()
   adminEmail: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isDemandeurData: boolean;
 
   @IsString()
   @IsOptional()

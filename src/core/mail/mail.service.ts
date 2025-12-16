@@ -112,7 +112,7 @@ export class MailService {
                 statusText: 'APPROUVÉE',
                 statusColor: '#28a745',
                 message: 'Nous avons le plaisir de vous informer que votre demande de billet d\'avion a été <strong>approuvée</strong>.',
-                subMessage: 'Notre équipe RH vous contactera prochainement pour finaliser les détails de votre voyage.',
+                subMessage: 'L\'équipe du Département des Moyens Généraux vous contactera prochainement pour finaliser les détails de votre voyage.',
             },
             ['REJECTED']: {
                 subject: '❌ Votre demande de billet d\'avion a été refusée',

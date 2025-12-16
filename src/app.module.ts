@@ -23,8 +23,8 @@ import { PublicRoutesModule } from './applications/ceo-office-app/PUBLIC-ROUTES/
     MongooseModule.forRootAsync({
       imports: [ConfigModule], // <-- Make ConfigModule available
       useFactory: async (configService: ConfigService) => ({
-        // uri: configService.get<string>("MONGODB_URI_DEV"), // <-- Get the URI from .env
-        uri: configService.get<string>("KADJI_GROUPE_RANGER_DATA_BASE_PROD"), // <-- Get the URI from .env
+        uri: configService.get<string>("MONGODB_URI_DEV"), // <-- Get the URI from .env
+        // uri: configService.get<string>("KADJI_GROUPE_RANGER_DATA_BASE_PROD"), // <-- Get the URI from .env
       }),
       inject: [ConfigService], // <-- Inject ConfigService into the factory
     }),

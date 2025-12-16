@@ -82,6 +82,10 @@ export class TravelTicket extends Document {
 
   @Prop({ required: false, match: /^\S+@\S+\.\S+$/ })
   adminEmail: string;
+
+
+  @Prop({ required: false, default: false })
+  isDemandeurData: boolean;
 }
 
 export const TravelTicketSchema = SchemaFactory.createForClass(TravelTicket);
