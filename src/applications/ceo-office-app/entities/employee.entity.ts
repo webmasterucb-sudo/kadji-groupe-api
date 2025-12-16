@@ -34,7 +34,11 @@ export class Employee {
   @Prop({ required: true, default: '' })
   telephone: string;
 
-  @Prop({ required: true, enum: ['Masculin', 'Féminin', 'Autre'], default: 'Masculin' })
+  @Prop({
+    required: true,
+    enum: ['Masculin', 'Féminin', 'Autre'],
+    default: 'Masculin',
+  })
   sexe: string;
 
   @Prop({ required: true, default: '' })
@@ -46,7 +50,11 @@ export class Employee {
   @Prop({ required: true, default: '' })
   departement: string;
 
-  @Prop({ required: true, enum: ['Employe', 'Contractuel', 'Consultant', 'Partenaire', "Stagiaire"], default: 'Employe' })
+  @Prop({
+    required: true,
+    enum: ['Employe', 'Contractuel', 'Consultant', 'Partenaire', 'Stagiaire'],
+    default: 'Employe',
+  })
   statut: string;
 
   @Prop({ type: [MembreFamille], default: [] })
@@ -54,6 +62,3 @@ export class Employee {
 }
 
 export const EmployeeSchema = SchemaFactory.createForClass(Employee);
-
-
-

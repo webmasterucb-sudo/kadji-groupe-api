@@ -5,13 +5,13 @@ import { EntrepriseController } from './entreprise.controller';
 import { Entreprise, EntrepriseSchema } from './entities/entreprise.entity';
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([
-            { name: Entreprise.name, schema: EntrepriseSchema },
-        ]),
-    ],
-    controllers: [EntrepriseController],
-    providers: [EntrepriseService],
-    exports: [EntrepriseService],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Entreprise.name, schema: EntrepriseSchema },
+    ]),
+  ],
+  controllers: [EntrepriseController],
+  providers: [EntrepriseService],
+  exports: [EntrepriseService],
 })
-export class EntrepriseModule { }
+export class EntrepriseModule {}

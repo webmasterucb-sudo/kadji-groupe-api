@@ -1,4 +1,10 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Le nom est obligatoire' })
@@ -18,13 +24,17 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty({ message: 'Le mot de passe est obligatoire' })
-  @MinLength(6, { message: 'Le mot de passe doit contenir au moins 6 caractères' })
+  @MinLength(6, {
+    message: 'Le mot de passe doit contenir au moins 6 caractères',
+  })
   password: string;
 
   @IsNotEmpty({ message: 'Le rôle est obligatoire' })
   @IsString()
   role: string;
 
-  @IsEnum(['ACTIVE', 'INACTIVE'], { message: 'Le statut doit être ACTIVE ou INACTIVE' })
+  @IsEnum(['ACTIVE', 'INACTIVE'], {
+    message: 'Le statut doit être ACTIVE ou INACTIVE',
+  })
   status: 'ACTIVE' | 'INACTIVE';
 }

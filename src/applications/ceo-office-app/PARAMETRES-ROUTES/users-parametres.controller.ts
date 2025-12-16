@@ -21,7 +21,7 @@ import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 @Controller('gestion-administrateurs')
 @UseGuards(JwtAuthGuard)
 export class UsersParametresController {
-  constructor(private readonly usersService: UsersParametresService) { }
+  constructor(private readonly usersService: UsersParametresService) {}
 
   /**
    * GET /api/users
@@ -136,8 +136,6 @@ export class UsersParametresController {
     }
   }
 
-
-
   /**
    * POST /api/users/check-email
    * Vérifier si un email existe déjà
@@ -146,7 +144,9 @@ export class UsersParametresController {
   @HttpCode(HttpStatus.OK)
   async checkEmailExists(@Body() checkEmailDto: CheckEmailDto) {
     try {
-      const exists = await this.usersService.checkEmailExists(checkEmailDto.email);
+      const exists = await this.usersService.checkEmailExists(
+        checkEmailDto.email,
+      );
       return {
         success: true,
         data: exists,
@@ -168,7 +168,10 @@ export class UsersParametresController {
   @HttpCode(HttpStatus.OK)
   async verifyUser(@Body() verifyUserDto: VerifyUserDto) {
     try {
-      const isValid = await this.usersService.verifyCredentials(verifyUserDto.email, verifyUserDto.password);
+      const isValid = await this.usersService.verifyCredentials(
+        verifyUserDto.email,
+        verifyUserDto.password,
+      );
       return {
         success: true,
         data: isValid,
@@ -181,10 +184,4 @@ export class UsersParametresController {
       };
     }
   }
-
-
-
-
-
-
 }

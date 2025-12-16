@@ -6,20 +6,24 @@ import * as mailchimp from '@mailchimp/mailchimp_marketing';
 export class MailchimpService {
   private readonly logger = new Logger(MailchimpService.name);
   private readonly audienceId: any;
-  
-  constructor(private configService: ConfigService) {  
-        mailchimp.setConfig({
-            apiKey: this.configService.get<string>('MAILCHIMP_API_KEY'),
-            server: this.configService.get<string>('MAILCHIMP_SERVER_PREFIX'),
-        });
 
-        this.audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
+  constructor(private configService: ConfigService) {
+    mailchimp.setConfig({
+      apiKey: this.configService.get<string>('MAILCHIMP_API_KEY'),
+      server: this.configService.get<string>('MAILCHIMP_SERVER_PREFIX'),
+    });
+
+    this.audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
   }
 
-
-  async addContact(email: string, firstName?: string, lastName?: string, tags?: string[]) {
+  async addContact(
+    email: string,
+    firstName?: string,
+    lastName?: string,
+    tags?: string[],
+  ) {
     try {
-    //   const audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
+      //   const audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
 
       const response = await mailchimp.lists.addListMember(this.audienceId, {
         email_address: email,
@@ -43,9 +47,14 @@ export class MailchimpService {
     }
   }
 
-  async updateContact(email: string, firstName?: string, lastName?: string, tags?: string[]) {
+  async updateContact(
+    email: string,
+    firstName?: string,
+    lastName?: string,
+    tags?: string[],
+  ) {
     try {
-    //  const audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
+      //  const audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
       const subscriberHash = this.getSubscriberHash(email);
 
       const response = await mailchimp.lists.updateListMember(
@@ -68,21 +77,23 @@ export class MailchimpService {
       this.logger.log(`Contact mis à jour avec succès: ${email}`);
       return response;
     } catch (error) {
-      this.logger.error(`Erreur lors de la mise à jour du contact: ${error.message}`);
+      this.logger.error(
+        `Erreur lors de la mise à jour du contact: ${error.message}`,
+      );
       throw error;
     }
   }
 
   async addTags(email: string, tags: string[]) {
     try {
-    //   const audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
+      //   const audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
       const subscriberHash = this.getSubscriberHash(email);
 
       const response = await mailchimp.lists.updateListMemberTags(
         this.audienceId,
         subscriberHash,
         {
-          tags: tags.map(tag => ({ name: tag, status: 'active' })),
+          tags: tags.map((tag) => ({ name: tag, status: 'active' })),
         },
       );
 
@@ -96,13 +107,15 @@ export class MailchimpService {
 
   async deleteContact(email: string) {
     try {
-    //   const audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
+      //   const audienceId = this.configService.get<string>('MAILCHIMP_AUDIENCE_ID');
       const subscriberHash = this.getSubscriberHash(email);
 
       await mailchimp.lists.deleteListMember(this.audienceId, subscriberHash);
       this.logger.log(`Contact supprimé avec succès: ${email}`);
     } catch (error) {
-      this.logger.error(`Erreur lors de la suppression du contact: ${error.message}`);
+      this.logger.error(
+        `Erreur lors de la suppression du contact: ${error.message}`,
+      );
       throw error;
     }
   }
@@ -112,4 +125,3 @@ export class MailchimpService {
     return crypto.createHash('md5').update(email.toLowerCase()).digest('hex');
   }
 }
-

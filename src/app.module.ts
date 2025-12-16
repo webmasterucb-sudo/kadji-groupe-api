@@ -17,18 +17,17 @@ import { PublicRoutesModule } from './applications/ceo-office-app/PUBLIC-ROUTES/
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, }),
+    ConfigModule.forRoot({ isGlobal: true }),
     // MongooseModule.forRoot(process.env.MONGODB_URI ?? (() => { throw new Error('MONGODB_URI is not defined'); })()),
 
     MongooseModule.forRootAsync({
       imports: [ConfigModule], // <-- Make ConfigModule available
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>("MONGODB_URI_DEV"), // <-- Get the URI from .env
+        uri: configService.get<string>('MONGODB_URI_DEV'), // <-- Get the URI from .env
         // uri: configService.get<string>("KADJI_GROUPE_RANGER_DATA_BASE_PROD"), // <-- Get the URI from .env
       }),
       inject: [ConfigService], // <-- Inject ConfigService into the factory
     }),
-
 
     // OffresEmploisModule,
     // ActualitesModule,
@@ -39,9 +38,9 @@ import { PublicRoutesModule } from './applications/ceo-office-app/PUBLIC-ROUTES/
     AuthModule,
     UsersModule,
     MailModule,
-    PublicRoutesModule
+    PublicRoutesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

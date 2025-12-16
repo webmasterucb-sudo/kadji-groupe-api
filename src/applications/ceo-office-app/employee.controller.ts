@@ -19,7 +19,7 @@ import { JwtAuthGuard } from '../../core/auth/guards/jwt-auth.guard';
 @Controller('employees')
 @UseGuards(JwtAuthGuard)
 export class EmployeeController {
-  constructor(private readonly employeeService: EmployeeService) { }
+  constructor(private readonly employeeService: EmployeeService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -56,7 +56,10 @@ export class EmployeeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateEmployeeDto: UpdateEmployeeDto,
+  ) {
     return this.employeeService.update(id, updateEmployeeDto);
   }
 

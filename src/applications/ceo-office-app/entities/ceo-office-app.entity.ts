@@ -1,4 +1,3 @@
-
 // src/travel-tickets/schemas/travel-ticket.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
@@ -65,7 +64,18 @@ export class TravelTicket extends Document {
   @Prop({ required: false, default: new Date() })
   dateRetour: Date;
 
-  @Prop({ required: false, enum: ['CANCELLED', 'SUBMITTED', 'APPROVED', 'REJECTED', 'ON_PROCESSING', 'PAID'], default: 'SUBMITTED' })
+  @Prop({
+    required: false,
+    enum: [
+      'CANCELLED',
+      'SUBMITTED',
+      'APPROVED',
+      'REJECTED',
+      'ON_PROCESSING',
+      'PAID',
+    ],
+    default: 'SUBMITTED',
+  })
   status: string;
 
   @Prop({ required: false, default: '' })
@@ -83,11 +93,8 @@ export class TravelTicket extends Document {
   @Prop({ required: false, match: /^\S+@\S+\.\S+$/ })
   adminEmail: string;
 
-
   @Prop({ required: false, default: false })
   isDemandeurData: boolean;
 }
 
 export const TravelTicketSchema = SchemaFactory.createForClass(TravelTicket);
-
-

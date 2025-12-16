@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 
 import { CreateAppartementVideDto } from './dto/create-appartement-vide.dto';
 import { UpdateAppartementVideDto } from './dto/update-appartement-vide.dto';
@@ -10,30 +18,35 @@ import { JwtAuthGuard } from '../../core/auth/guards/jwt-auth.guard';
 @Controller('empty-apartments')
 @UseGuards(JwtAuthGuard)
 export class AppartementVideController {
-    constructor(private readonly appartementVideService: AppartementVideService) { }
+  constructor(
+    private readonly appartementVideService: AppartementVideService,
+  ) {}
 
-    @Post()
-    create(@Body() createAppartementVideDto: CreateAppartementVideDto) {
-        return this.appartementVideService.create(createAppartementVideDto);
-    }
+  @Post()
+  create(@Body() createAppartementVideDto: CreateAppartementVideDto) {
+    return this.appartementVideService.create(createAppartementVideDto);
+  }
 
-    @Get()
-    findAll() {
-        return this.appartementVideService.findAll();
-    }
+  @Get()
+  findAll() {
+    return this.appartementVideService.findAll();
+  }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.appartementVideService.findOne(id);
-    }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.appartementVideService.findOne(id);
+  }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateAppartementVideDto: UpdateAppartementVideDto) {
-        return this.appartementVideService.update(id, updateAppartementVideDto);
-    }
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateAppartementVideDto: UpdateAppartementVideDto,
+  ) {
+    return this.appartementVideService.update(id, updateAppartementVideDto);
+  }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.appartementVideService.remove(id);
-    }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.appartementVideService.remove(id);
+  }
 }

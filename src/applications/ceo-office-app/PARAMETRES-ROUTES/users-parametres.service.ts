@@ -1,17 +1,24 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AdminUser, AdminUserDocument } from 'src/core/users/entities/user.entity';
+import {
+  AdminUser,
+  AdminUserDocument,
+} from 'src/core/users/entities/user.entity';
 
 @Injectable()
 export class UsersParametresService {
   constructor(
     @InjectModel(AdminUser.name)
     private readonly userModel: Model<AdminUserDocument>,
-  ) { }
+  ) {}
 
   /**
    * Récupérer tous les utilisateurs
@@ -28,10 +35,7 @@ export class UsersParametresService {
    * Récupérer un utilisateur par ID
    */
   async findOne(id: string): Promise<AdminUserDocument> {
-    const user = await this.userModel
-      .findById(id)
-      .select('-password')
-      .exec();
+    const user = await this.userModel.findById(id).select('-password').exec();
 
     if (!user) {
       throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé`);
@@ -44,7 +48,9 @@ export class UsersParametresService {
    */
   async create(createUserDto: CreateUserDto): Promise<AdminUserDocument> {
     // Vérifier si l'email existe déjà
-    const existingUser = await this.userModel.findOne({ email: createUserDto.email }).exec();
+    const existingUser = await this.userModel
+      .findOne({ email: createUserDto.email })
+      .exec();
 
     if (existingUser) {
       throw new ConflictException('Cet email est déjà utilisé');
@@ -61,14 +67,20 @@ export class UsersParametresService {
     const savedUser = await user.save();
 
     // Retourner sans le mot de passe
-    const userWithoutPassword = await this.userModel.findById(savedUser._id).select('-password').exec();
+    const userWithoutPassword = await this.userModel
+      .findById(savedUser._id)
+      .select('-password')
+      .exec();
     return userWithoutPassword!;
   }
 
   /**
    * Mettre à jour un utilisateur
    */
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<AdminUserDocument> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<AdminUserDocument> {
     const user = await this.userModel.findById(id).exec();
 
     if (!user) {
@@ -77,7 +89,9 @@ export class UsersParametresService {
 
     // Si l'email est modifié, vérifier qu'il n'existe pas déjà
     if (updateUserDto.email && updateUserDto.email !== user.email) {
-      const existingUser = await this.userModel.findOne({ email: updateUserDto.email }).exec();
+      const existingUser = await this.userModel
+        .findOne({ email: updateUserDto.email })
+        .exec();
       if (existingUser) {
         throw new ConflictException('Cet email est déjà utilisé');
       }
@@ -88,7 +102,9 @@ export class UsersParametresService {
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
     }
 
-    await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
+    await this.userModel
+      .findByIdAndUpdate(id, updateUserDto, { new: true })
+      .exec();
     return await this.findOne(id);
   }
 
@@ -109,8 +125,6 @@ export class UsersParametresService {
       message: 'Utilisateur supprimé avec succès',
     };
   }
-
-
 
   /**
    * Vérifier si un email existe déjà
@@ -133,9 +147,4 @@ export class UsersParametresService {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     return isPasswordValid;
   }
-
-
-
-
-
 }

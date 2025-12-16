@@ -14,4 +14,4 @@ import { AdminUser, AdminUserSchema } from './entities/user.entity';
   providers: [UsersParametresService],
   exports: [UsersParametresService],
 })
-export class UsersParametresModule { }
+export class UsersParametresModule {}

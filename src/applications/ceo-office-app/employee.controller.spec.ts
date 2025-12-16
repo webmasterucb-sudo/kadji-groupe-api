@@ -93,9 +93,15 @@ describe('EmployeeController', () => {
   describe('update', () => {
     it('should update an employee', async () => {
       const updateDto = { nom: 'Updated' };
-      const result = await controller.update('507f1f77bcf86cd799439011', updateDto as any);
+      const result = await controller.update(
+        '507f1f77bcf86cd799439011',
+        updateDto as any,
+      );
       expect(result).toEqual(mockEmployee);
-      expect(service.update).toHaveBeenCalledWith('507f1f77bcf86cd799439011', updateDto);
+      expect(service.update).toHaveBeenCalledWith(
+        '507f1f77bcf86cd799439011',
+        updateDto,
+      );
     });
   });
 

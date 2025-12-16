@@ -2,35 +2,33 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Client } from '@microsoft/microsoft-graph-client';
 import { ConfigService } from '@nestjs/config';
 
-
-
 @Injectable()
 export class MailService {
-    constructor(
-        @Inject('GRAPH_CLIENT') private readonly graphClient: Client,
-        private readonly configService: ConfigService,
-    ) { }
+  constructor(
+    @Inject('GRAPH_CLIENT') private readonly graphClient: Client,
+    private readonly configService: ConfigService,
+  ) {}
 
-    async sendEmailToValidateur(
-        email: string,
-        subject: string,
-        employeeName: string,
-        message: string,
-        linkToValidated: string,
-    ) {
-        try {
-            const mail = {
-                subject: subject,
-                toRecipients: [
-                    {
-                        emailAddress: {
-                            address: email,
-                        },
-                    },
-                ],
-                body: {
-                    contentType: 'HTML',
-                    content: `
+  async sendEmailToValidateur(
+    email: string,
+    subject: string,
+    employeeName: string,
+    message: string,
+    linkToValidated: string,
+  ) {
+    try {
+      const mail = {
+        subject: subject,
+        toRecipients: [
+          {
+            emailAddress: {
+              address: email,
+            },
+          },
+        ],
+        body: {
+          contentType: 'HTML',
+          content: `
                         <!DOCTYPE html>
                         <html>
                         <head>
@@ -76,72 +74,71 @@ export class MailService {
                         </body>
                         </html>
                     `,
-                },
-            };
+        },
+      };
 
-            await this.graphClient.api(`/users/${this.configService.get('MAIL_FROM')}/sendMail`)
-                .post({ message: mail });
+      await this.graphClient
+        .api(`/users/${this.configService.get('MAIL_FROM')}/sendMail`)
+        .post({ message: mail });
 
-            return { success: true, message: 'Email sent successfully' };
-        } catch (error) {
-            console.error('Error sending email:', error);
-            throw error;
-        }
+      return { success: true, message: 'Email sent successfully' };
+    } catch (error) {
+      console.error('Error sending email:', error);
+      throw error;
     }
+  }
 
+  // Additional email to notify employee about approval/rejection can be added here
 
+  async sendTicketStatusNotification(
+    employeeEmail: string,
+    employeeName: string,
+    status: string,
+    rejectionReason?: string,
+  ) {
+    const isApproved = status === 'APPROVED';
 
+    const statusConfig = {
+      ['APPROVED']: {
+        subject: "✅ Votre demande de billet d'avion a été approuvée",
+        headerBgColor: '#28a745',
+        iconEmoji: '✈️',
+        statusText: 'APPROUVÉE',
+        statusColor: '#28a745',
+        message:
+          "Nous avons le plaisir de vous informer que votre demande de billet d'avion a été <strong>approuvée</strong>.",
+        subMessage:
+          "L'équipe du Département des Moyens Généraux vous contactera prochainement pour finaliser les détails de votre voyage.",
+      },
+      ['REJECTED']: {
+        subject: "❌ Votre demande de billet d'avion a été refusée",
+        headerBgColor: '#dc3545',
+        iconEmoji: '📋',
+        statusText: 'REFUSÉE',
+        statusColor: '#dc3545',
+        message:
+          "Nous regrettons de vous informer que votre demande de billet d'avion a été <strong>refusée</strong>.",
+        subMessage: rejectionReason
+          ? `<strong>Motif du refus :</strong> ${rejectionReason}`
+          : "Pour plus d'informations, veuillez contacter votre responsable hiérarchique.",
+      },
+    };
 
+    const config = statusConfig[status];
 
-
-    // Additional email to notify employee about approval/rejection can be added here
-
-    async sendTicketStatusNotification(
-        employeeEmail: string,
-        employeeName: string,
-        status: string,
-        rejectionReason?: string,
-    ) {
-        const isApproved = status === 'APPROVED';
-
-        const statusConfig = {
-            ['APPROVED']: {
-                subject: '✅ Votre demande de billet d\'avion a été approuvée',
-                headerBgColor: '#28a745',
-                iconEmoji: '✈️',
-                statusText: 'APPROUVÉE',
-                statusColor: '#28a745',
-                message: 'Nous avons le plaisir de vous informer que votre demande de billet d\'avion a été <strong>approuvée</strong>.',
-                subMessage: 'L\'équipe du Département des Moyens Généraux vous contactera prochainement pour finaliser les détails de votre voyage.',
+    try {
+      const mail = {
+        subject: config.subject,
+        toRecipients: [
+          {
+            emailAddress: {
+              address: employeeEmail,
             },
-            ['REJECTED']: {
-                subject: '❌ Votre demande de billet d\'avion a été refusée',
-                headerBgColor: '#dc3545',
-                iconEmoji: '📋',
-                statusText: 'REFUSÉE',
-                statusColor: '#dc3545',
-                message: 'Nous regrettons de vous informer que votre demande de billet d\'avion a été <strong>refusée</strong>.',
-                subMessage: rejectionReason
-                    ? `<strong>Motif du refus :</strong> ${rejectionReason}`
-                    : 'Pour plus d\'informations, veuillez contacter votre responsable hiérarchique.',
-            },
-        };
-
-        const config = statusConfig[status];
-
-        try {
-            const mail = {
-                subject: config.subject,
-                toRecipients: [
-                    {
-                        emailAddress: {
-                            address: employeeEmail,
-                        },
-                    },
-                ],
-                body: {
-                    contentType: 'HTML',
-                    content: `
+          },
+        ],
+        body: {
+          contentType: 'HTML',
+          content: `
                         <!DOCTYPE html>
                         <html>
                         <head>
@@ -186,7 +183,9 @@ export class MailService {
                                         </p>
                                     </div>
 
-                                    ${isApproved ? `
+                                    ${
+                                      isApproved
+                                        ? `
                                     <!-- Next Steps for Approved -->
                                     <div style="margin-top: 30px;">
                                         <h3 style="color: #333333; font-size: 16px; margin-bottom: 15px; border-bottom: 2px solid #28a745; padding-bottom: 8px; display: inline-block;">
@@ -198,7 +197,8 @@ export class MailService {
                                             <li>Contactez RH pour toute question complémentaire</li>
                                         </ul>
                                     </div>
-                                    ` : `
+                                    `
+                                        : `
                                     <!-- Next Steps for Rejected -->
                                     <div style="margin-top: 30px;">
                                         <h3 style="color: #333333; font-size: 16px; margin-bottom: 15px; border-bottom: 2px solid #dc3545; padding-bottom: 8px; display: inline-block;">
@@ -210,7 +210,8 @@ export class MailService {
                                             <li>L'équipe RH reste à votre disposition</li>
                                         </ul>
                                     </div>
-                                    `}
+                                    `
+                                    }
                                 </div>
 
                                 <!-- Contact Section -->
@@ -235,44 +236,47 @@ export class MailService {
                         </body>
                         </html>
                     `,
-                },
-            };
-            await this.graphClient.api(`/users/${this.configService.get('MAIL_FROM')}/sendMail`)
-                .post({ message: mail });
+        },
+      };
+      await this.graphClient
+        .api(`/users/${this.configService.get('MAIL_FROM')}/sendMail`)
+        .post({ message: mail });
 
-            return { success: true, message: `Email de notification (${status}) envoyé avec succès à ${employeeEmail}` };
-        } catch (error) {
-            console.error('Error sending status notification email:', error);
-            throw error;
-        }
+      return {
+        success: true,
+        message: `Email de notification (${status}) envoyé avec succès à ${employeeEmail}`,
+      };
+    } catch (error) {
+      console.error('Error sending status notification email:', error);
+      throw error;
     }
+  }
 
-
-    /**
-     * Notifie le directeur qu'une demande de billet d'avion a été approuvée
-     * et est en attente de traitement final
-     */
-    async sendTicketPendingFinalApprovalToDirector(
-        directorName: string,
-        employeeName: string,
-        employeeEntreprise: string,
-        employeeDepartment: string,
-        destination: string,
-        travelDate: string,
-    ) {
-        try {
-            const mail = {
-                subject: '🎫 Nouvelle demande de billet approuvée - Action requise',
-                toRecipients: [
-                    {
-                        emailAddress: {
-                            address: "christian.nana@sa-ucb.com",
-                        },
-                    },
-                ],
-                body: {
-                    contentType: 'HTML',
-                    content: `
+  /**
+   * Notifie le directeur qu'une demande de billet d'avion a été approuvée
+   * et est en attente de traitement final
+   */
+  async sendTicketPendingFinalApprovalToDirector(
+    directorName: string,
+    employeeName: string,
+    employeeEntreprise: string,
+    employeeDepartment: string,
+    destination: string,
+    travelDate: string,
+  ) {
+    try {
+      const mail = {
+        subject: '🎫 Nouvelle demande de billet approuvée - Action requise',
+        toRecipients: [
+          {
+            emailAddress: {
+              address: 'christian.nana@sa-ucb.com',
+            },
+          },
+        ],
+        body: {
+          contentType: 'HTML',
+          content: `
                         <!DOCTYPE html>
                         <html>
                         <head>
@@ -360,7 +364,7 @@ export class MailService {
 
                                     <!-- Action Button -->
                                     <!-- <div style="text-align: center; margin: 35px 0;">
-                                        <a href="${"linkToProcess"}" style="background: linear-gradient(135deg, #b45c4eff 0%, #d65845ff 100%); color: #ffffff; padding: 16px 40px; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(180, 92, 78, 0.4); text-transform: uppercase; letter-spacing: 1px;">
+                                        <a href="${'linkToProcess'}" style="background: linear-gradient(135deg, #b45c4eff 0%, #d65845ff 100%); color: #ffffff; padding: 16px 40px; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(180, 92, 78, 0.4); text-transform: uppercase; letter-spacing: 1px;">
                                             🎫 Traiter la demande
                                         </a>
                                     </div> --> 
@@ -400,25 +404,19 @@ export class MailService {
                         </body>
                         </html>
                     `,
-                },
-            };
-            await this.graphClient.api(`/users/${this.configService.get('MAIL_FROM')}/sendMail`)
-                .post({ message: mail });
+        },
+      };
+      await this.graphClient
+        .api(`/users/${this.configService.get('MAIL_FROM')}/sendMail`)
+        .post({ message: mail });
 
-            return { success: true, message: `Notification envoyée au directeur pour traitement final` };
-        } catch (error) {
-            console.error('Error sending director notification email:', error);
-            throw error;
-        }
+      return {
+        success: true,
+        message: `Notification envoyée au directeur pour traitement final`,
+      };
+    } catch (error) {
+      console.error('Error sending director notification email:', error);
+      throw error;
     }
+  }
 }
-
-
-
-
-
-
-
-
-
-

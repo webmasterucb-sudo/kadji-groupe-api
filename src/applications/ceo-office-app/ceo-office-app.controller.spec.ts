@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TravelTicketsController } from './ceo-office-app.controller';
 import { TravelTicketsService } from './ceo-office-app.service';
 
-
 describe('TravelTicketsController', () => {
   let controller: TravelTicketsController;
 

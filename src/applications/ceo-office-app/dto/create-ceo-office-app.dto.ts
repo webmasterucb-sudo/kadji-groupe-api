@@ -1,8 +1,20 @@
-export class CreateCeoOfficeAppDto { }
+export class CreateCeoOfficeAppDto {}
 
 import { Prop } from '@nestjs/mongoose';
 // src/travel-tickets/dto/create-travel-ticket.dto.ts
-import { IsString, IsNotEmpty, IsNumber, IsDateString, Matches, Min, MinLength, IsDate, IsOptional, IsEmail, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsDateString,
+  Matches,
+  Min,
+  MinLength,
+  IsDate,
+  IsOptional,
+  IsEmail,
+  IsBoolean,
+} from 'class-validator';
 
 export class CreateTravelTicketDto {
   @IsString()
@@ -56,11 +68,15 @@ export class CreateTravelTicketDto {
   projet: string;
 
   @IsString()
-  @Matches(/^[A-Z]{3}$/, { message: 'Provenance code must be 3 uppercase letters' })
+  @Matches(/^[A-Z]{3}$/, {
+    message: 'Provenance code must be 3 uppercase letters',
+  })
   provenanceCodeAeroport: string;
 
   @IsString()
-  @Matches(/^[A-Z]{3}$/, { message: 'Destination code must be 3 uppercase letters' })
+  @Matches(/^[A-Z]{3}$/, {
+    message: 'Destination code must be 3 uppercase letters',
+  })
   destinationCodeAeroport: string;
 
   @IsString()
@@ -114,9 +130,6 @@ export class CreateTravelTicketDto {
   @IsString()
   approvedById: string;
 }
-
-
-
 
 // export interface HotelApartementDTO {
 //   id?: string;

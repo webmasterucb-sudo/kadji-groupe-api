@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Employee, EmployeeDocument } from './entities/employee.entity';
@@ -9,7 +13,7 @@ import { UpdateEmployeeDto } from './dto/update-employee.dto';
 export class EmployeeService {
   constructor(
     @InjectModel(Employee.name) private employeeModel: Model<EmployeeDocument>,
-  ) { }
+  ) {}
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
     try {
@@ -38,12 +42,17 @@ export class EmployeeService {
   async findByMatricule(matricule: string): Promise<Employee> {
     const employee = await this.employeeModel.findOne({ matricule }).exec();
     if (!employee) {
-      throw new NotFoundException(`Employé avec le matricule ${matricule} non trouvé`);
+      throw new NotFoundException(
+        `Employé avec le matricule ${matricule} non trouvé`,
+      );
     }
     return employee;
   }
 
-  async update(id: string, updateEmployeeDto: UpdateEmployeeDto): Promise<Employee> {
+  async update(
+    id: string,
+    updateEmployeeDto: UpdateEmployeeDto,
+  ): Promise<Employee> {
     try {
       const updatedEmployee = await this.employeeModel
         .findByIdAndUpdate(id, updateEmployeeDto, { new: true })
@@ -63,7 +72,9 @@ export class EmployeeService {
   }
 
   async remove(id: string): Promise<Employee> {
-    const deletedEmployee = await this.employeeModel.findByIdAndDelete(id).exec();
+    const deletedEmployee = await this.employeeModel
+      .findByIdAndDelete(id)
+      .exec();
     if (!deletedEmployee) {
       throw new NotFoundException(`Employé avec l'ID ${id} non trouvé`);
     }
