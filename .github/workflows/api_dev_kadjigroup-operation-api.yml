@@ -1,8 +1,7 @@
-name: Build and deploy NestJS API to Azure Web App
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-env:
-  NODE_VERSION: '22.x'
-  AZURE_WEBAPP_NAME: 'kadjigroup-operation-api'
+name: Build and deploy Node.js app to Azure Web App - api-ucb-connect
 
 on:
   push:
@@ -11,124 +10,59 @@ on:
   workflow_dispatch:
 
 jobs:
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Set up Node.js version
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
-  #         cache: 'npm'
-
-  #     - name: Install dependencies
-  #       run: npm ci
-
-  #     - name: Run Lint
-  #       run: npm run lint
-
-  # test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Set up Node.js version
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
-  #         cache: 'npm'
-
-  #     - name: Install dependencies
-  #       run: npm ci
-
-  #     - name: Run Unit Tests
-  #       run: npm run test
-
-  quality-check-code:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js version
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run Security Audit
-        run: npm audit --production --audit-level=high
-        continue-on-error: true  # Ne pas bloquer le déploiement pour des vulnérabilités mineures
-
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          node-version: '20.x'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build NestJS application
-        run: npm run build
-
-      - name: Prepare deploy package
+      - name: npm install and build
         run: |
-          rm -rf deploy
-          mkdir -p deploy
-          # Copy compiled dist folder
-          cp -R dist deploy/
-          # Copy package files for production
-          cp package.json deploy/
-          cp package-lock.json deploy/
-          # Install production dependencies only
-          cd deploy
-          npm ci --production
-          cd ..
+          npm install
+          npm run build
+
+      # Optional: Run tests here if needed
+      # - name: Run tests
+      #   run: npm run test
+
+      - name: Remove dev dependencies to reduce artifact size
+        run: npm prune --production
+
+      - name: Zip artifact for deployment
+        run: zip -r release.zip . -x "*.git*" "*.github*"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: nestjs-api
-          path: deploy
-          retention-days: 1
+          name: node-app
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [quality-check-code, build]
+    needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: nestjs-api
-          path: nestjs-api
+          name: node-app
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
- 
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          resource-group-name: 'KadjiGroup_rg'
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }} 
           slot-name: 'Production'
-          package: ./nestjs-api
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: .

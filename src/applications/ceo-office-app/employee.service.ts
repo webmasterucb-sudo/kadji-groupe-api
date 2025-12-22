@@ -13,7 +13,7 @@ import { UpdateEmployeeDto } from './dto/update-employee.dto';
 export class EmployeeService {
   constructor(
     @InjectModel(Employee.name) private employeeModel: Model<EmployeeDocument>,
-  ) {}
+  ) { }
 
   async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
     try {
@@ -40,7 +40,7 @@ export class EmployeeService {
   }
 
   async findByMatricule(matricule: string): Promise<Employee> {
-    const employee = await this.employeeModel.findOne({ matricule }).exec();
+    const employee = await this.employeeModel.findOne({ matricule }).limit(1200).exec();
     if (!employee) {
       throw new NotFoundException(
         `Employé avec le matricule ${matricule} non trouvé`,

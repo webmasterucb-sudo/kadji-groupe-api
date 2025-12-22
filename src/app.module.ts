@@ -43,4 +43,4 @@ import { PublicRoutesModule } from './applications/ceo-office-app/PUBLIC-ROUTES/
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

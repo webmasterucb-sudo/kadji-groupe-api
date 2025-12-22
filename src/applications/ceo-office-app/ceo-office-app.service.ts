@@ -11,7 +11,7 @@ export class TravelTicketsService {
   constructor(
     @InjectModel(TravelTicket.name)
     private travelTicketModel: Model<TravelTicket>,
-  ) {}
+  ) { }
 
   async create(
     createTravelTicketDto: CreateTravelTicketDto,
@@ -21,7 +21,7 @@ export class TravelTicketsService {
   }
 
   async findAll(): Promise<TravelTicket[]> {
-    return this.travelTicketModel.find().sort({ updatedAt: -1 }).exec();
+    return this.travelTicketModel.find().sort({ updatedAt: -1 }).limit(1200).exec();
   }
 
   async findOne(id: string): Promise<TravelTicket> {
