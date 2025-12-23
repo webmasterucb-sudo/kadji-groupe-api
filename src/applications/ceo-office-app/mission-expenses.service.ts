@@ -44,10 +44,10 @@ export class MissionExpensesService {
             .findByIdAndUpdate(id, updateMissionExpenseDto, { new: true })
             .exec();
         if (!updatedMissionExpense) {
-            throw new NotFoundException(`MissionExpense with ID ${id} not found`);
+            throw new NotFoundException(`MissionExpense with ID ${id} not found yet`);
         }
         return updatedMissionExpense;
-    }
+    } 
 
     async remove(id: string): Promise<MissionExpense> {
         const deletedMissionExpense = await this.missionExpenseModel
