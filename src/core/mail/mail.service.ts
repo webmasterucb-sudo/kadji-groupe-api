@@ -419,4 +419,233 @@ export class MailService {
       throw error;
     }
   }
+
+  /**
+   * Envoie une notification d'alerte pour les contrats d'appartements
+   * arrivant à expiration dans les 2 prochains mois
+   */
+  async sendContractExpirationAlert(
+    adminEmail: string,
+    contracts: Array<{
+      type: string;
+      employeeName: string;
+      employeeCompany: string;
+      department: string;
+      residenceName: string;
+      endDate: string;
+      daysRemaining: number;
+      monthlyRent?: number;
+      currency?: string;
+      status?: string;
+    }>,
+  ) {
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    // Générer les lignes du tableau HTML pour chaque contrat
+    const contractRows = contracts
+      .map((contract, index) => {
+        const urgencyColor =
+          contract.daysRemaining <= 14
+            ? '#dc3545' // Rouge - Très urgent
+            : contract.daysRemaining <= 30
+              ? '#ff9800' // Orange - Urgent
+              : '#28a745'; // Vert - Attention
+
+        const typeLabel =
+          contract.type === 'APPARTEMENT_VIDE'
+            ? 'Appartement Vide'
+            : 'Appartement Meublé';
+
+        return `
+          <tr style="background-color: ${index % 2 === 0 ? '#ffffff' : '#f8f9fa'};">
+            <td style="padding: 12px 15px; border-bottom: 1px solid #dee2e6; font-size: 13px;">
+              <strong>${contract.employeeName}</strong>
+              <br>
+              <span style="color: #666; font-size: 12px;">${contract.employeeCompany}</span>
+            </td>
+            <td style="padding: 12px 15px; border-bottom: 1px solid #dee2e6; font-size: 13px;">
+              ${contract.department || 'N/A'}
+            </td>
+            <td style="padding: 12px 15px; border-bottom: 1px solid #dee2e6; font-size: 13px;">
+              ${contract.residenceName}
+            </td>
+            <td style="padding: 12px 15px; border-bottom: 1px solid #dee2e6; font-size: 13px;">
+              <span style="background-color: ${contract.type === 'APPARTEMENT_VIDE' ? '#e3f2fd' : '#fff3e0'}; color: ${contract.type === 'APPARTEMENT_VIDE' ? '#1565c0' : '#e65100'}; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                ${typeLabel}
+              </span>
+            </td>
+            <td style="padding: 12px 15px; border-bottom: 1px solid #dee2e6; font-size: 13px; font-weight: 600;">
+              ${contract.endDate}
+            </td>
+            <td style="padding: 12px 15px; border-bottom: 1px solid #dee2e6; text-align: center;">
+              <span style="background-color: ${urgencyColor}; color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;">
+                ${contract.daysRemaining} jours
+              </span>
+            </td>
+          </tr>
+        `;
+      })
+      .join('');
+
+    // Compter les contrats par niveau d'urgence
+    const criticalCount = contracts.filter((c) => c.daysRemaining <= 14).length;
+    const urgentCount = contracts.filter(
+      (c) => c.daysRemaining > 14 && c.daysRemaining <= 30,
+    ).length;
+    const attentionCount = contracts.filter((c) => c.daysRemaining > 30).length;
+
+    try {
+      const mail = {
+        subject: `🏠 Alerte: ${contracts.length} contrat(s) d'appartement expirant bientôt - ${formattedDate}`,
+        toRecipients: [
+          {
+            emailAddress: {
+              address: adminEmail,
+            },
+          },
+        ],
+        body: {
+          contentType: 'HTML',
+          content: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Alerte Contrats Expirants</title>
+            </head>
+            <body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+              <div style="max-width: 900px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.12); margin-top: 20px; margin-bottom: 20px;">
+                
+                <!-- Header -->
+                <div style="background: linear-gradient(135deg, #b45c4eff 0%, #d65845ff 50%, #463c3aff 100%); padding: 40px 20px; text-align: center;">
+                  <img src="https://www.kadjigroup.com/wp-content/uploads/2023/06/Kadji-logo-4-300x300.png" alt="Kadji Group Logo" style="width: 140px; height: auto; margin-bottom: 15px;">
+                  <div style="font-size: 50px; margin-bottom: 10px;">🏠</div>
+                  <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 1px;">
+                    ALERTE CONTRATS EXPIRANTS
+                  </h1>
+                  <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0; font-size: 14px;">
+                    Rapport hebdomadaire - ${formattedDate}
+                  </p>
+                </div>
+
+                <!-- Summary Stats -->
+                <div style="display: flex; justify-content: center; margin: -20px 20px 20px; gap: 15px;">
+                  <div style="background: #ffffff; border-radius: 10px; padding: 15px 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 120px;">
+                    <div style="font-size: 28px; font-weight: 700; color: #dc3545;">${criticalCount}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Critique (&lt;14j)</div>
+                  </div>
+                  <div style="background: #ffffff; border-radius: 10px; padding: 15px 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 120px;">
+                    <div style="font-size: 28px; font-weight: 700; color: #ff9800;">${urgentCount}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Urgent (14-30j)</div>
+                  </div>
+                  <div style="background: #ffffff; border-radius: 10px; padding: 15px 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 120px;">
+                    <div style="font-size: 28px; font-weight: 700; color: #28a745;">${attentionCount}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Attention (30-60j)</div>
+                  </div>
+                </div>
+
+                <!-- Content -->
+                <div style="padding: 30px;">
+                  <div style="background-color: #fff3cd; border-left: 4px solid #ff9800; padding: 15px 20px; border-radius: 0 8px 8px 0; margin-bottom: 25px;">
+                    <p style="color: #856404; font-size: 14px; line-height: 1.6; margin: 0;">
+                      ⚠️ <strong>Attention :</strong> ${contracts.length} contrat(s) d'appartement arrive(nt) à expiration dans les <strong>2 prochains mois</strong>. 
+                      Veuillez prendre les mesures nécessaires pour le renouvellement ou la clôture de ces contrats.
+                    </p>
+                  </div>
+
+                  <!-- Table -->
+                  <div style="overflow-x: auto; border-radius: 8px; border: 1px solid #dee2e6;">
+                    <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                      <thead>
+                        <tr style="background: linear-gradient(135deg, #463c3aff 0%, #5a4d4bff 100%);">
+                          <th style="padding: 15px; text-align: left; color: #ffffff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Employé</th>
+                          <th style="padding: 15px; text-align: left; color: #ffffff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Département</th>
+                          <th style="padding: 15px; text-align: left; color: #ffffff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Résidence</th>
+                          <th style="padding: 15px; text-align: left; color: #ffffff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Type</th>
+                          <th style="padding: 15px; text-align: left; color: #ffffff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Date Fin</th>
+                          <th style="padding: 15px; text-align: center; color: #ffffff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Jours Restants</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${contractRows}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Legend -->
+                  <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+                    <p style="margin: 0 0 10px; font-size: 12px; color: #666; font-weight: 600;">Légende des couleurs :</p>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                      <span style="font-size: 12px; color: #666;">
+                        <span style="display: inline-block; width: 12px; height: 12px; background-color: #dc3545; border-radius: 50%; margin-right: 5px;"></span>
+                        Critique (moins de 14 jours)
+                      </span>
+                      <span style="font-size: 12px; color: #666;">
+                        <span style="display: inline-block; width: 12px; height: 12px; background-color: #ff9800; border-radius: 50%; margin-right: 5px;"></span>
+                        Urgent (14 à 30 jours)
+                      </span>
+                      <span style="font-size: 12px; color: #666;">
+                        <span style="display: inline-block; width: 12px; height: 12px; background-color: #28a745; border-radius: 50%; margin-right: 5px;"></span>
+                        Attention (30 à 60 jours)
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Actions recommandées -->
+                  <div style="margin-top: 25px; background-color: #e8f4fd; border-radius: 8px; padding: 20px;">
+                    <h3 style="color: #1976d2; font-size: 14px; margin: 0 0 12px;">
+                      📋 Actions recommandées
+                    </h3>
+                    <ul style="color: #555555; font-size: 13px; line-height: 1.8; padding-left: 20px; margin: 0;">
+                      <li>Contacter les employés concernés pour connaître leurs intentions</li>
+                      <li>Préparer les documents de renouvellement si nécessaire</li>
+                      <li>Planifier les états des lieux de sortie pour les départs</li>
+                      <li>Mettre à jour le système une fois les décisions prises</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Footer -->
+                <div style="background-color: #463c3aff; padding: 20px; text-align: center;">
+                  <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0;">
+                    Ce rapport est généré automatiquement chaque Lundi à 08h00
+                  </p>
+                </div>
+
+                <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-top: 1px solid #eeeeee;">
+                  <img src="https://www.kadjigroup.com/wp-content/uploads/2023/07/cropped-KadjiGroup-LOGO_horizontal_White-2-768x263.png" alt="Kadji Group" style="width: 100px; height: auto; opacity: 0.6; margin-bottom: 8px; filter: grayscale(100%);">
+                  <p style="color: #999999; font-size: 11px; margin: 0;">
+                    &copy; ${new Date().getFullYear()} Kadji Group - Direction Générale. Tous droits réservés.
+                  </p>
+                  <p style="color: #bbbbbb; font-size: 10px; margin: 5px 0 0;">
+                    Ceci est un email automatique, merci de ne pas y répondre.
+                  </p>
+                </div>
+              </div>
+            </body>
+            </html>
+          `,
+        },
+      };
+
+      await this.graphClient
+        .api(`/users/${this.configService.get('MAIL_FROM')}/sendMail`)
+        .post({ message: mail });
+
+      return {
+        success: true,
+        message: `Email d'alerte envoyé avec succès à ${adminEmail}`,
+      };
+    } catch (error) {
+      console.error('Error sending contract expiration alert email:', error);
+      throw error;
+    }
+  }
 }

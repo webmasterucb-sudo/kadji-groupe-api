@@ -15,7 +15,7 @@ export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
   @Get()
-  async getDashboardData() {
+  async onGetDashboardData() {
     return await this.dashboardService.getDashboardData();
   }
 }

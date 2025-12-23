@@ -23,8 +23,8 @@ export class TravelTicketPublicService {
     const data = await createdTicket.save();
 
     // Send email notification
-    const validationLink = `http://localhost:4200/#/ceo-validation-director-interface/${data._id}`;
-    // const validationLink = `https://kadji-groupe-operations-app.netlify.app/#/ceo-validation-director-interface/${data._id}`; // Placeholder link
+    // const validationLink = `http://localhost:4200/#/ceo-validation-director-interface/${data._id}`;
+    const validationLink = `https://kadjigroup-operation-web-cfddcwf7dcg7d5b8.uaenorth-01.azurewebsites.net/#/ceo-validation-director-interface/${data._id}`; // Placeholder link
     await this.mailService.sendEmailToValidateur(
       createTravelTicketPublicDto.emailValidateur,
       'Nouvelle demande de billet de voyage',
@@ -40,7 +40,8 @@ export class TravelTicketPublicService {
     const data = await this.travelTicketPublicModel
       .find()
       .sort({ updatedAt: -1 })
-      .exec();
+      .limit(1200)
+      .exec();  
     return data;
   }
 

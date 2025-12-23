@@ -14,11 +14,11 @@ import { UpdateEntrepriseDto } from './dto/update-entreprise.dto';
 import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 
 @Controller('entreprises')
-@UseGuards(JwtAuthGuard)
 export class EntrepriseController {
   constructor(private readonly entrepriseService: EntrepriseService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() createEntrepriseDto: CreateEntrepriseDto) {
     return this.entrepriseService.create(createEntrepriseDto);
   }
@@ -34,6 +34,7 @@ export class EntrepriseController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(
     @Param('id') id: string,
     @Body() updateEntrepriseDto: UpdateEntrepriseDto,
@@ -42,6 +43,7 @@ export class EntrepriseController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.entrepriseService.remove(id);
   }

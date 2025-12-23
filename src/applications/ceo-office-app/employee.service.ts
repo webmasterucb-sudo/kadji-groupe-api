@@ -28,7 +28,7 @@ export class EmployeeService {
   }
 
   async findAll(): Promise<Employee[]> {
-    return await this.employeeModel.find().sort({ updatedAt: -1 }).exec();
+    return await this.employeeModel.find().sort({updatedAt: -1 }).limit(1200).exec();
   }
 
   async findOne(id: string): Promise<Employee> {

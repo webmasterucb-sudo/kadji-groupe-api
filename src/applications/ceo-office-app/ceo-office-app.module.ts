@@ -1,6 +1,7 @@
 // src/travel-tickets/travel-tickets.module.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TravelTicketsController } from './ceo-office-app.controller';
 import { TravelTicketsService } from './ceo-office-app.service';
 import {
@@ -42,9 +43,13 @@ import { EntrepriseModule } from './PARAMETRES-ROUTES/entreprise.module';
 import { ValidateurEmailModule } from './PARAMETRES-ROUTES/validateur-email.module';
 import { HotelParametreModule } from './PARAMETRES-ROUTES/hotel-parametre.module';
 import { FournisseurBilletModule } from './PARAMETRES-ROUTES/fournisseur-billet.module';
+import { ContractAlertService } from './scheduled-tasks/contract-alert.service';
+import { ContractAlertController } from './scheduled-tasks/contract-alert.controller';
+import { MailModule } from '../../core/mail/mail.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     MongooseModule.forFeature([
       { name: TravelTicket.name, schema: TravelTicketSchema },
       { name: Employee.name, schema: EmployeeSchema },
@@ -59,6 +64,7 @@ import { FournisseurBilletModule } from './PARAMETRES-ROUTES/fournisseur-billet.
     ValidateurEmailModule,
     HotelParametreModule,
     FournisseurBilletModule,
+    MailModule,
   ],
   controllers: [
     TravelTicketsController,
@@ -68,6 +74,7 @@ import { FournisseurBilletModule } from './PARAMETRES-ROUTES/fournisseur-billet.
     AppartementMeubleController,
     AppartementVideController,
     DashboardController,
+    ContractAlertController,
   ],
   providers: [
     TravelTicketsService,
@@ -77,6 +84,7 @@ import { FournisseurBilletModule } from './PARAMETRES-ROUTES/fournisseur-billet.
     AppartementMeubleService,
     AppartementVideService,
     DashboardService,
+    ContractAlertService,
   ],
 })
 export class CeoCoreModule {}
