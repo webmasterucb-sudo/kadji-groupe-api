@@ -13,3 +13,7 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
+
+
+
+// npm run start:prod
