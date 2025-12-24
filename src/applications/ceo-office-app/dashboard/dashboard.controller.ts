@@ -10,7 +10,7 @@ import { JwtAuthGuard } from 'src/core/auth/guards/jwt-auth.guard';
 // So I should probably use it too.
 
 @Controller('ceo-office-app/dashboard')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
