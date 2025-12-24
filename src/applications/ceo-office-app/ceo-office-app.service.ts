@@ -19,10 +19,12 @@ export class TravelTicketsService {
     const createdTicket = new this.travelTicketModel(createTravelTicketDto);
     return createdTicket.save();
   }
+  
 
   async findAll(): Promise<TravelTicket[]> {
-    return this.travelTicketModel.find().sort({updatedAt: -1 }).limit(1200).exec();
+    return this.travelTicketModel.find().sort({updatedAt: -1 }).limit(1200).exec(); 
   }
+
 
   async findOne(id: string): Promise<TravelTicket> {
     const ticket = await this.travelTicketModel.findById(id).exec();
