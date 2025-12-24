@@ -2,7 +2,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema({ timestamps: false })
+@Schema({ timestamps: true })
 export class TravelTicket extends Document {
   @Prop({ required: false, minlength: 2, default: '' })
   nom: string;
