@@ -22,7 +22,7 @@ export class ValidateurEmailService {
   async findAll(): Promise<ValidateurEmailDocument[]> {
     const data = await this.validateurEmailModel
       .find()
-      .sort({ createdAt: -1 })
+      .sort({ updatedAt: -1 })
       .exec();
     return data;
   }
@@ -48,7 +48,7 @@ export class ValidateurEmailService {
       );
     }
 
-    const createdValidateur = new this.validateurEmailModel(createDto);
+    const createdValidateur = new this.validateurEmailModel(createDto);  
     return await createdValidateur.save();
   }
 

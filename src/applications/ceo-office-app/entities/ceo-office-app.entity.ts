@@ -64,6 +64,9 @@ export class TravelTicket extends Document {
   @Prop({ required: false, default: new Date() })
   dateRetour: Date;
 
+  @Prop({ required: false, })
+  dateAchatBillet: Date;
+
   @Prop({
     required: false,
     enum: [

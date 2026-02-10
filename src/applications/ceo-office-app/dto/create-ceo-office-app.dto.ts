@@ -70,7 +70,7 @@ export class CreateTravelTicketDto {
   @IsString()
   @Matches(/^[A-Z]{3}$/, {
     message: 'Provenance code must be 3 uppercase letters',
-  })
+  })  
   provenanceCodeAeroport: string;
 
   @IsString()
@@ -94,6 +94,10 @@ export class CreateTravelTicketDto {
   @IsDate()
   @IsOptional()
   dateRetour: Date;
+
+  @IsDate()
+  @IsOptional()
+  dateAchatBillet: Date;
 
   @IsDate()
   submittedAt: Date;
