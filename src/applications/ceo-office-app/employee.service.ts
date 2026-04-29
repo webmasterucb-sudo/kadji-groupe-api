@@ -19,7 +19,7 @@ export class EmployeeService {
     try {
       const createdEmployee = new this.employeeModel(createEmployeeDto);
       return await createdEmployee.save();
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 11000) {
         throw new ConflictException('Un employé avec ce matricule existe déjà');
       }
@@ -63,7 +63,7 @@ export class EmployeeService {
       }
 
       return updatedEmployee;
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 11000) {
         throw new ConflictException('Un employé avec ce matricule existe déjà');
       }

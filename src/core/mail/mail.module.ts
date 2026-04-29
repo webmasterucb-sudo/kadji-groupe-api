@@ -44,6 +44,6 @@ import { MailController } from './mail.controller';
       inject: [ConfigService],
     },
   ],
-  exports: [MailService],
+  exports: [MailService, 'GRAPH_CLIENT'],
 })
 export class MailModule {}

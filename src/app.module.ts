@@ -14,6 +14,7 @@ import { AuthModule } from './core/auth/auth.module';
 import { UsersModule } from './core/users/users.module';
 import { MailModule } from './core/mail/mail.module';
 import { PublicRoutesModule } from './applications/ceo-office-app/PUBLIC-ROUTES/public-routes.module';
+import { MadibaRunModule } from './applications/madiba-run-api/madiba-run.module';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { PublicRoutesModule } from './applications/ceo-office-app/PUBLIC-ROUTES/
       imports: [ConfigModule], // <-- Make ConfigModule available
       useFactory: async (configService: ConfigService) => ({
         // uri: configService.get<string>('MONGODB_URI_DEV'), // <-- Get the URI from .env
-        uri: configService.get<string>("KADJI_GROUPE_RANGER_DATA_BASE_PROD"), // <-- Get the URI from .env
+        uri: configService.get<string>("KADJI_GROUPE_RANGER_DATA_BASE_PROD"),  // <-- Get the URI from .env
       }),
       inject: [ConfigService], // <-- Inject ConfigService into the factory
     }),
@@ -39,8 +40,10 @@ import { PublicRoutesModule } from './applications/ceo-office-app/PUBLIC-ROUTES/
     UsersModule,
     MailModule,
     PublicRoutesModule,
+    MadibaRunModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule { }
+

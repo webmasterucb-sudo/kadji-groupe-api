@@ -37,7 +37,7 @@ export class MailchimpService {
 
       this.logger.log(`Contact ajouté avec succès: ${email}`);
       return response;
-    } catch (error) {
+    } catch (error: any) {
       if (error.response?.body?.title === 'Member Exists') {
         this.logger.warn(`Le contact existe déjà: ${email}`);
         return this.updateContact(email, firstName, lastName, tags);
@@ -76,7 +76,7 @@ export class MailchimpService {
 
       this.logger.log(`Contact mis à jour avec succès: ${email}`);
       return response;
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Erreur lors de la mise à jour du contact: ${error.message}`,
       );
@@ -99,7 +99,7 @@ export class MailchimpService {
 
       this.logger.log(`Tags ajoutés avec succès pour: ${email}`);
       return response;
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Erreur lors de l'ajout des tags: ${error.message}`);
       throw error;
     }
@@ -112,7 +112,7 @@ export class MailchimpService {
 
       await mailchimp.lists.deleteListMember(this.audienceId, subscriberHash);
       this.logger.log(`Contact supprimé avec succès: ${email}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Erreur lors de la suppression du contact: ${error.message}`,
       );
