@@ -19,6 +19,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { memoryStorage } from 'multer';
 
 // -----------------------------------------------------------------------------
@@ -98,6 +99,14 @@ import { AdminAuthController } from './admin-auth.controller';
       },
     }),
      
+    // -------------------------------------------------------------------------
+    // CONFIGURATION THROTTLER - RATE LIMITING
+    // -------------------------------------------------------------------------
+    ThrottlerModule.forRoot([{
+      ttl: 60000,   // Fenêtre de 60 secondes
+      limit: 3,     // Maximum 3 requêtes par fenêtre
+    }]),
+
     // -------------------------------------------------------------------------
     // MODULE MAIL - NOTIFICATIONS PAR EMAIL (Microsoft Graph)
     // -------------------------------------------------------------------------

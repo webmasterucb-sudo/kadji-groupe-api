@@ -30,6 +30,7 @@ import {
   AssignerDossardDto,
 } from './dto/participant-common.dto';
 import { JwtAuthGuard } from '../../core/auth/guards/jwt-auth.guard';
+import { ThrottlerGuard, Throttle } from '@nestjs/throttler';
 
 /**
  * Contrôleur pour la gestion des participants au Madiba Run
@@ -47,6 +48,8 @@ export class ParticipantController {
    */
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({ default: { ttl: 60000, limit: 3 } })
   async register(@Body() createParticipantDto: CreateParticipantDto) {
     const result = await this.participantService.create(createParticipantDto);
     return {

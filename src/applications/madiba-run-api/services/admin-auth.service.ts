@@ -142,12 +142,13 @@ export class AdminAuthService {
     }
 
     // 4. Vérifier le statut du compte
-    if (admin.status !== AdminStatus.ACTIF) {
-      throw new ForbiddenException(
-        this.getStatusMessage(admin.status) 
-      );
-    }
+    // if (admin.status !== AdminStatus.ACTIF) {
+    //   throw new ForbiddenException(
+    //     this.getStatusMessage(admin.status) 
+    //   );
+    // }
 
+    
     // 5. Enregistrer la connexion réussie
     await this.adminService.recordLogin((admin as any)._id.toString());
 
