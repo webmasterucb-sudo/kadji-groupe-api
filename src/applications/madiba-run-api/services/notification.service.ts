@@ -93,7 +93,7 @@ export class NotificationService {
   async sendEmailConfirmation(participant: Participant): Promise<EmailResponse> {
     try {
       const mailFrom = this.configService.get<string>('MAIL_FROM');
-      const eventDate = this.configService.get<string>('MADIBA_RUN_DATE') || '21 Juin 2026';
+      const eventDate = this.configService.get<string>('MADIBA_RUN_DATE') || '12 Juillet 2026';
       const eventLocation = this.configService.get<string>('MADIBA_RUN_LOCATION') || 'Douala';
 
       const mail = {
@@ -163,7 +163,7 @@ export class NotificationService {
       const smsPassword = this.configService.get<string>('SMS_PASSWORD');
       const smsSender = this.configService.get<string>('SMS_SENDER') || 'MADIBARUN';
 
-      const message = `MADIBA RUN 4 HEALTH  - 2ème édition: Felicitations ${participant.prenom}! Inscription validee. Dossard: ${participant.numeroDossard || 'A venir'}. RDV le 21 Juin 2026! InfoLine: 683701188`;
+      const message = `MADIBA RUN 4 HEALTH  - 2ème édition: Felicitations ${participant.prenom}! Inscription validee. Dossard: ${participant.numeroDossard || 'A venir'}. RDV le 12 Juillet 2026 ! InfoLine: 683701188`;
 
       const response = await fetch(`${smsApiUrl}/messages`, {
         method: 'POST',
@@ -214,7 +214,7 @@ export class NotificationService {
    * Max 160 caracteres pour tenir en 1 seul SMS (encodage GSM-7)
    */
   private buildSmsMessage(participant: Participant): string {
-    return `Madiba Run: Bienvenue ${participant.prenom}! Inscription confirmee (${participant.categorie} - ${participant.distanceParcourir}). RDV le 21 Juin 2026. InfoLine: 683701188`;
+    return `Madiba Run: Bienvenue ${participant.prenom}! Inscription confirmee (${participant.categorie} - ${participant.distanceParcourir}). RDV le 12 Juillet 2026. InfoLine: 683701188`;
   }
 
   /**
@@ -256,7 +256,7 @@ export class NotificationService {
             </h2>
             
             <p style="color: #4b5563; font-size: 16px; line-height: 1.7; margin-bottom: 25px;">
-              Nous sommes ravis de vous confirmer votre inscription à la 2eme édition du <strong>Madiba Run 4 Health 2026.</strong>! 
+              Nous sommes ravis de vous confirmer votre inscription à la 2eme édition du <strong>Madiba Run 4 Health 2026.</strong> 
               Vous serez contacté très prochainement pour la suite des informations.
             </p>
         
@@ -302,14 +302,14 @@ export class NotificationService {
 
             <!-- Bouton de contact -->
             <div style="text-align: center; margin: 35px 0;">
-              <a href="mailto:contact@madiba-run.cm" style="background-color: #2d5a87; color: #ffffff; padding: 15px 35px; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 16px; display: inline-block;">
+              <a href="mailto:madiba@sa-ucb.com" style="background-color: #2d5a87; color: #ffffff; padding: 15px 35px; text-decoration: none; border-radius: 50px; font-weight: 600; font-size: 16px; display: inline-block;">
                 Nous contacter
               </a>
             </div>
 
             <p style="color: #9ca3af; font-size: 13px; line-height: 1.5; margin-top: 30px; text-align: center;">
               Une question? Contactez-nous au <strong style="color: #1e3a5f;">(+237) 683 701 188</strong><br>
-              ou par email à <a href="mailto:contact@madiba-run.cm" style="color: #2d5a87;">contact@madiba-run.cm</a>
+              ou par email à <a href="mailto:madiba@sa-ucb.com" style="color: #2d5a87;">madiba@sa-ucb.com</a>
             </p>
           </div>
 
@@ -322,7 +322,7 @@ export class NotificationService {
               &copy; ${new Date().getFullYear()} Madiba Run. Tous droits réservés.
             </p>
             <p style="color: #6b8eb3; font-size: 12px; margin: 8px 0 0;">
-              Courir pour la santé. Rejoignez-nous le 21 Juin 2026 à Douala!
+              Courir pour la santé. Rejoignez-nous le 12 Juillet 2026 à Douala!
             </p>
           </div>
         </div>
@@ -363,3 +363,4 @@ export class NotificationService {
     return errors[code] || `Erreur inconnue (code: ${code})`;
   }
 }
+
