@@ -177,18 +177,27 @@ export class ParticipantController {
   }
 
   /**
-   * Exporter les participants en CSV
-   * GET /madiba-run/participants/export/csv
+   * Exporter les participants en Excel
+   * GET /madiba-run/participants/export/excel
    */
-  @Get('export/csv')
+  @Get('export/excel')
   @UseGuards(JwtAuthGuard)
-  @Header('Content-Type', 'text/csv; charset=utf-8')
-  @Header('Content-Disposition', 'attachment; filename="participants-madiba-run.csv"')
-  async exportCsv(@Query() filters: FilterParticipantDto, @Res() res: Response) {
-    const csv = await this.participantService.exportToCsv(filters);
-    // Ajouter BOM pour Excel
-    res.send('\ufeff' + csv);
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="participants-madiba-run.xlsx"',
+  )
+  async exportExcel(
+    @Query() filters: FilterParticipantDto,
+    @Res() res: Response,
+  ) {
+    const buffer = await this.participantService.exportToExcel(filters);
+    res.send(buffer);
   }
+
 
   /**
    * Rechercher par numéro de dossard
