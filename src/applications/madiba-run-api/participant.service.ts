@@ -42,7 +42,7 @@ export class ParticipantService {
     private participantModel: Model<ParticipantDocument>,
     private readonly notificationService: NotificationService,
     private readonly fileUploadService: FileUploadService,
-  ) {}
+  ) { }
 
   /**
    * Créer un nouveau participant et envoyer les notifications
@@ -55,22 +55,11 @@ export class ParticipantService {
     };
   }> {
     try {
-      // // Vérification de l'unicité de l'email
-      // const existingByEmail = await this.participantModel
-      //   .findOne({ email: createParticipantDto.email.toLowerCase() })
-      //   .exec();
-      
-      // if (existingByEmail) {
-      //   throw new ConflictException(
-      //     'Un participant avec cet email est déjà inscrit',
-      //   );
-      // }
-
       // Vérification de l'unicité du téléphone
       const existingByPhone = await this.participantModel
         .findOne({ telephone: createParticipantDto.telephone })
         .exec();
-      
+
       if (existingByPhone) {
         throw new ConflictException(
           'Un participant avec ce numéro de téléphone est déjà inscrit',
@@ -142,7 +131,7 @@ export class ParticipantService {
       totalPages: Math.ceil(total / limit),
     };
   }
-  
+
   /**
    * Récupérer un participant par son ID
    */
@@ -513,7 +502,7 @@ export class ParticipantService {
     // Générer le buffer binaire
     return Buffer.from(await workbook.xlsx.writeBuffer());
   }
-  
+
   /**
    * Construit la requête de filtrage
    */

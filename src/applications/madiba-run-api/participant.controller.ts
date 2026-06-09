@@ -180,7 +180,7 @@ export class ParticipantController {
    * Exporter les participants en Excel
    * GET /madiba-run/participants/export/excel
    */
-  @Get('export/csv')
+  @Get('export/excel')
   @UseGuards(JwtAuthGuard)
   @Header(
     'Content-Type',
