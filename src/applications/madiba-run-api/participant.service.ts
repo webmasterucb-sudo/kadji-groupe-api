@@ -23,6 +23,7 @@ import {
 } from './dto/participant-common.dto';
 import { NotificationService } from './services/notification.service';
 import { FileUploadService } from './services/file-upload.service';
+import * as ExcelJS from 'exceljs';
 
 interface PaginatedResult<T> {
   data: T[];
@@ -444,53 +445,73 @@ export class ParticipantService {
   }
 
   /**
-   * Exporter les participants au format CSV
+   * Exporter les participants au format Excel
    */
-  async exportToCsv(filters: FilterParticipantDto = {}): Promise<string> {
+  async exportToExcel(filters: FilterParticipantDto = {}): Promise<Buffer> {
     const query = this.buildFilterQuery(filters);
-    const participants = await this.participantModel
-      .find(query)
-      .sort({ createdAt: -1 })
-      .exec();
-
-    const headers = [
-      'Nom',
-      'Prénom',
-      'Sexe',
-      'Date de naissance',
-      'Téléphone',
-      'Email',
-      'Point de départ',
-      'Quartier',
-      'Distance',
-      'Catégorie',
-      'Statut',
-      'N° Dossard',
-      'Date inscription',
+    const participants = await this.participantModel.find(query).sort({ createdAt: -1 }).exec();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Participants');
+    // Définir les colonnes avec leur en-tête, clé et largeur par défaut
+    worksheet.columns = [
+      { header: 'Nom', key: 'nom', width: 20 },
+      { header: 'Prénom', key: 'prenom', width: 20 },
+      { header: 'Sexe', key: 'sexe', width: 10 },
+      { header: 'Date de naissance', key: 'dateNaissance', width: 18 },
+      { header: 'Téléphone', key: 'telephone', width: 18 },
+      { header: 'Email', key: 'email', width: 30 },
+      { header: 'Point de départ', key: 'pointDepart', width: 25 },
+      { header: 'Quartier', key: 'quartier', width: 20 },
+      { header: 'Distance', key: 'distance', width: 12 },
+      { header: 'Catégorie', key: 'categorie', width: 15 },
+      { header: 'Statut', key: 'statut', width: 15 },
+      { header: 'N° Dossard', key: 'numeroDossard', width: 15 },
+      { header: 'Date inscription', key: 'createdAt', width: 20 },
     ];
-
-    const rows = participants.map((p) => [
-      p.nom,
-      p.prenom,
-      p.sexe,
-      p.dateNaissance?.toISOString().split('T')[0] || '',
-      p.telephone,
-      p.email,
-      p.pointDepart,
-      p.quartier,
-      p.distanceParcourir,
-      p.categorie,
-      p.statut,
-      p.numeroDossard || '',
-      (p as any).createdAt?.toISOString() || '',
-    ]);
-
-    const csv = [
-      headers.join(';'),
-      ...rows.map((row) => row.join(';')),
-    ].join('\n');
-
-    return csv;
+    // Appliquer un style élégant à la ligne d'en-tête (Gras, fond bleu, texte blanc)
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FFFFFF' } };
+    headerRow.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '1F4E78' } // Bleu foncé professionnel
+    };
+    headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+    headerRow.height = 25;
+    // Ajouter les données
+    participants.forEach((p) => {
+      const row = worksheet.addRow({
+        nom: p.nom,
+        prenom: p.prenom,
+        sexe: p.sexe,
+        dateNaissance: p.dateNaissance ? p.dateNaissance.toISOString().split('T')[0] : '',
+        // Forcer le format texte pour éviter la perte du '0' ou la notation scientifique
+        telephone: p.telephone,
+        email: p.email,
+        pointDepart: p.pointDepart,
+        quartier: p.quartier,
+        distance: p.distanceParcourir,
+        categorie: p.categorie,
+        statut: p.statut,
+        numeroDossard: p.numeroDossard || '',
+        createdAt: (p as any).createdAt ? (p as any).createdAt.toISOString().split('T')[0] : '',
+      });
+      // Définir explicitement les numéros de téléphone comme du texte dans Excel
+      row.getCell('telephone').numFmt = '@';
+    });
+    // Ajuster automatiquement les largeurs de colonnes si nécessaire
+    worksheet.columns.forEach((column) => {
+      let maxColumnLength = 0;
+      column.eachCell?.({ includeEmpty: true }, (cell) => {
+        const cellLength = cell.value ? cell.value.toString().length : 0;
+        if (cellLength > maxColumnLength) {
+          maxColumnLength = cellLength;
+        }
+      });
+      column.width = Math.max(maxColumnLength + 4, 10);
+    });
+    // Générer le buffer binaire
+    return Buffer.from(await workbook.xlsx.writeBuffer());
   }
   
   /**
