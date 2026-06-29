@@ -55,16 +55,16 @@ export class ParticipantService {
     };
   }> {
     try {
-      // Vérification de l'unicité de l'email
-      const existingByEmail = await this.participantModel
-        .findOne({ email: createParticipantDto.email.toLowerCase() })
-        .exec();
+      // // Vérification de l'unicité de l'email
+      // const existingByEmail = await this.participantModel
+      //   .findOne({ email: createParticipantDto.email.toLowerCase() })
+      //   .exec();
       
-      if (existingByEmail) {
-        throw new ConflictException(
-          'Un participant avec cet email est déjà inscrit',
-        );
-      }
+      // if (existingByEmail) {
+      //   throw new ConflictException(
+      //     'Un participant avec cet email est déjà inscrit',
+      //   );
+      // }
 
       // Vérification de l'unicité du téléphone
       const existingByPhone = await this.participantModel
