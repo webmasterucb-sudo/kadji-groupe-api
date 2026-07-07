@@ -194,17 +194,6 @@ export class ParticipantService {
     updateParticipantDto: UpdateParticipantDto,
   ): Promise<Participant> {
     try {
-      // Vérification de l'email si modifié
-      if (updateParticipantDto.email) {
-        const existing = await this.participantModel.findOne({
-          email: updateParticipantDto.email.toLowerCase(),
-          _id: { $ne: id },
-        });
-        if (existing) {
-          throw new ConflictException('Cet email est déjà utilisé');
-        }
-      }
-
       const updatedParticipant = await this.participantModel
         .findByIdAndUpdate(
           id,

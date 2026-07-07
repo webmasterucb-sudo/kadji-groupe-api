@@ -114,7 +114,7 @@ export class Participant {
 
 export const ParticipantSchema = SchemaFactory.createForClass(Participant);
 
-// Index composé pour améliorer les performances de recherche
+// Index pour améliorer les performances de recherche
 ParticipantSchema.index({ email: 1 });
 ParticipantSchema.index({ telephone: 1 });
 ParticipantSchema.index({ categorie: 1, distanceParcourir: 1 });
